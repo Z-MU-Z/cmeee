@@ -1,4 +1,4 @@
-# cmeee
+# git使用指南
 ## .gitignore
 
 忽略某些文件不上传
