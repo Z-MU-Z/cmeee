@@ -15,7 +15,7 @@ MODEL_TYPE=bert
 MODEL_PATH=../bert-base-chinese
 SEED=2022
 LABEL_NAMES=(labels)
-TASK_ID=0
+TASK_ID=1
 
 case ${TASK_ID} in
 0)
@@ -34,7 +34,7 @@ case ${TASK_ID} in
   ;;
 *)
   echo "Error ${TASK_ID}"
-  exit -1
+  exit 1
   ;;
 esac
 
