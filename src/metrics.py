@@ -64,7 +64,34 @@ class ComputeMetricsForNestedNER: # training_args  `--label_names labels labels2
 
         # '''
 
-        return { "f1": None }
+        # print(predictions[1,:,1])
+        # print(labels1[1])
+        # print(labels2[1])
+        pred_list1 = extract_entities(predictions[:,:,0],True, True)
+        pred_list2 = extract_entities(predictions[:, :, 1],True, False)
+        label_list1 = extract_entities(labels1, True, True)
+        label_list2 = extract_entities(labels2, True, False)
+        total_true_and_pred = 0
+        total_true = 0
+        total_pred = 0
+        #print(label_list2)
+        #print(pred_list2)
+        for i in range(len(pred_list1)):
+            # print(pred_list1[i])
+            # print(pred_list2[i])
+            pred = set(pred_list1[i])|set(pred_list2[i])
+            #print(pred)
+            total_pred += len(pred)
+            true = set(label_list1[i])|set(label_list2[i])
+            total_true += len(true)
+            true_and_pred = set.intersection(true,pred)
+            total_true_and_pred += len(true_and_pred)
+        f1 = 2 * total_true_and_pred / (total_pred + total_true)
+        # print(total_pred)
+        # print(total_true)
+        # print(total_true_and_pred)
+        # print(f1)
+        return { "f1": f1 }
 
 
 def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = False, first_labels: bool = True) -> List[List[tuple]]:
