@@ -1,7 +1,3 @@
-Test from gyw from cu01 hh
-Now another branch has been created and I am in the master branch
-Test from gyw from cu01 in test branch branch
-
 id2label
 ['[PAD]', 'O', 'B-dep', 'I-dep', 'B-equ', 'I-equ', 'B-mic', 'I-mic', 'B-ite', 'I-ite', 'B-dru', 'I-dru', 'B-pro', 'I-pro', 'B-sym', 'I-sym', 'B-dis', 'I-dis', 'B-bod', 'I-bod']
 

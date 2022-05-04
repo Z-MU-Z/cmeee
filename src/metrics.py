@@ -1,8 +1,10 @@
+import collections
 
 import numpy as np
 
 from typing import List, Union, NamedTuple, Tuple, Counter
-from ee_data import EE_label2id, EE_label2id1, EE_label2id2, EE_id2label1, EE_id2label2, EE_id2label, NER_PAD, _LABEL_RANK
+from ee_data import EE_label2id, EE_label2id1, EE_label2id2, EE_id2label1, EE_id2label2, EE_id2label, NER_PAD, \
+    _LABEL_RANK
 
 
 class EvalPrediction(NamedTuple):
@@ -18,21 +20,18 @@ class EvalPrediction(NamedTuple):
     label_ids: np.ndarray
 
 
-class ComputeMetricsForNER: # training_args  `--label_names labels `
+class ComputeMetricsForNER:  # training_args  `--label_names labels `
     def __call__(self, eval_pred) -> dict:
         predictions, labels = eval_pred
-        
-        # -100 ==> [PAD]
-        predictions[predictions == -100] = EE_label2id[NER_PAD] # [batch, seq_len]
-        labels[labels == -100] = EE_label2id[NER_PAD] # [batch, seq_len]
-        #print(predictions[1])
-        #print(labels[0])
-        #'''NOTE: You need to finish the code of computing f1-score.
 
-        #'''
+        # -100 ==> [PAD]
+        predictions[predictions == -100] = EE_label2id[NER_PAD]  # [batch, seq_len]
+        labels[labels == -100] = EE_label2id[NER_PAD]  # [batch, seq_len]
+        # '''NOTE: You need to finish the code of computing f1-score.
+
+        # '''
         pred_list = extract_entities(predictions)
         label_list = extract_entities(labels)
-        #print(pred_list[1])
         total_true_and_pred = 0
         total_true = 0
         total_pred = 0
@@ -41,60 +40,46 @@ class ComputeMetricsForNER: # training_args  `--label_names labels `
             total_pred += len(pred)
             true = set(label_list[i])
             total_true += len(true)
-            true_and_pred = set.intersection(true,pred)
+            true_and_pred = set.intersection(true, pred)
             total_true_and_pred += len(true_and_pred)
-        #print(total_pred)
-        #print(total_true)
-        #print(total_true_and_pred)
-        f1 = 2*total_true_and_pred/(total_pred+total_true)
-        #print(f1)
-        return { "f1": f1 }
+        f1 = 2 * total_true_and_pred / (total_pred + total_true)
+        return {"f1": f1}
 
 
-class ComputeMetricsForNestedNER: # training_args  `--label_names labels labels2`
+class ComputeMetricsForNestedNER:  # training_args  `--label_names labels labels2`
     def __call__(self, eval_pred) -> dict:
         predictions, (labels1, labels2) = eval_pred
-        
+
         # -100 ==> [PAD]
-        predictions[predictions == -100] = EE_label2id[NER_PAD] # [batch, seq_len, 2]
-        labels1[labels1 == -100] = EE_label2id[NER_PAD] # [batch, seq_len]
-        labels2[labels2 == -100] = EE_label2id[NER_PAD] # [batch, seq_len]
-        
+        predictions[predictions == -100] = EE_label2id[NER_PAD]  # [batch, seq_len, 2]
+        labels1[labels1 == -100] = EE_label2id[NER_PAD]  # [batch, seq_len]
+        labels2[labels2 == -100] = EE_label2id[NER_PAD]  # [batch, seq_len]
+
         # '''NOTE: You need to finish the code of computing f1-score.
 
         # '''
 
-        # print(predictions[1,:,1])
-        # print(labels1[1])
-        # print(labels2[1])
-        pred_list1 = extract_entities(predictions[:,:,0],True, True)
-        pred_list2 = extract_entities(predictions[:, :, 1],True, False)
+        pred_list1 = extract_entities(predictions[:, :, 0], True, True)
+        pred_list2 = extract_entities(predictions[:, :, 1], True, False)
         label_list1 = extract_entities(labels1, True, True)
         label_list2 = extract_entities(labels2, True, False)
         total_true_and_pred = 0
         total_true = 0
         total_pred = 0
-        #print(label_list2)
-        #print(pred_list2)
         for i in range(len(pred_list1)):
-            # print(pred_list1[i])
-            # print(pred_list2[i])
-            pred = set(pred_list1[i])|set(pred_list2[i])
-            #print(pred)
+            pred = set(pred_list1[i]) | set(pred_list2[i])
+            # print(pred)
             total_pred += len(pred)
-            true = set(label_list1[i])|set(label_list2[i])
+            true = set(label_list1[i]) | set(label_list2[i])
             total_true += len(true)
-            true_and_pred = set.intersection(true,pred)
+            true_and_pred = set.intersection(true, pred)
             total_true_and_pred += len(true_and_pred)
         f1 = 2 * total_true_and_pred / (total_pred + total_true)
-        # print(total_pred)
-        # print(total_true)
-        # print(total_true_and_pred)
-        # print(f1)
-        return { "f1": f1 }
+        return {"f1": f1}
 
 
-def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = False, first_labels: bool = True) -> List[List[tuple]]:
+def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = False, first_labels: bool = True) -> \
+List[List[tuple]]:
     """
     本评测任务采用严格 Micro-F1作为主评测指标, 即要求预测出的 实体的起始、结束下标，实体类型精准匹配才算预测正确。
     
@@ -109,10 +94,11 @@ def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = F
         id2label = EE_id2label
     else:
         id2label = EE_id2label1 if first_labels else EE_id2label2
-    #print(id2label)
     entity_set = set(_LABEL_RANK.keys())
-    def dicide_type(cache):
-        c = Counter(cache)
+
+    def decide_type(cache):
+        # c = Counter(cache)  # NOTE: seems this would be regarded as a bug by pycharm
+        c = collections.Counter(cache)
         rank_c = c.most_common(len(list(c.keys())))
         if len(rank_c) == 1:
             type = rank_c[0][0]
@@ -125,7 +111,6 @@ def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = F
                     candidate.append(rank_c[i][0])
                 else:
                     break
-            #print(candidate)
             max_rank = -1
             for type in candidate:
                 if _LABEL_RANK[type] > max_rank:
@@ -133,18 +118,19 @@ def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = F
                     max_rank = _LABEL_RANK[type]
             type = temp_type
         return type
+
     batch_entities = []  # List[List[(start_idx, end_idx, type)]]
-    bs , max_len = batch_labels_or_preds.shape
+    bs, max_len = batch_labels_or_preds.shape
     # '''NOTE: You need to finish this function of extracting entities for generating results and computing metrics.
-    for i in  range(bs):
+    for i in range(bs):
         entity_list = []
         index = 0
         start_idx = 0
         start_id = 0
-        #end_id = 0
-        #end_idx = 0
+        # end_id = 0
+        # end_idx = 0
         cache = []
-        while id2label[batch_labels_or_preds[i][index]] != '[PAD]' and index<max_len:
+        while id2label[batch_labels_or_preds[i][index]] != '[PAD]' and index < max_len:
             if start_id:
                 # if batch_labels_or_preds[i][index] == start_id:
                 #     entity_list.append((start_index,start_index,id2label[batch_labels_or_preds[i][index]][2:]))
@@ -152,19 +138,14 @@ def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = F
                 if id2label[batch_labels_or_preds[i][index]][0] == 'I':
                     cache.append(id2label[batch_labels_or_preds[i][index]][2:])
                     index += 1
-                    #print(index)
                     if index == max_len:
-                        type = dicide_type(cache)
-                        # print(c)
-                        entity_list.append((start_idx, index-1, type))
+                        type = decide_type(cache)
+                        entity_list.append((start_idx, index - 1, type))
 
                     continue
                 else:
-                    end_idx = index-1
-                    #print(id2label[batch_labels_or_preds[i][index]])
-                    #print(cache)
-                    type = dicide_type(cache)
-                    #print(c)
+                    end_idx = index - 1
+                    type = decide_type(cache)
                     entity_list.append((start_idx, end_idx, type))
                     start_id = 0
 
@@ -178,14 +159,10 @@ def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = F
             if index == max_len:
                 if start_id:
                     print(index)
-                    #cache.append(id2label[batch_labels_or_preds[i][index]][2:])
-                    entity_list.append((start_index, index-1, id2label[batch_labels_or_preds[i][start_idx]][2:]))
+                    # cache.append(id2label[batch_labels_or_preds[i][index]][2:])
+                    entity_list.append((start_index, index - 1, id2label[batch_labels_or_preds[i][start_idx]][2:]))
                 break
         batch_entities.append(entity_list)
-        #print(c)
-        #print(c.most_common(len(list(c.keys()))))
-
-                
 
     # '''
     return batch_entities
@@ -203,7 +180,7 @@ if __name__ == '__main__':
         print('You passed the test for ComputeMetricsForNER.')
     else:
         print('The result of ComputeMetricsForNER is not right.')
-    
+
     # Test for ComputeMetricsForNestedNER
     predictions = np.load('../test_files/predictions_nested.npy')
     labels1 = np.load('../test_files/labels1_nested.npy')
@@ -215,4 +192,3 @@ if __name__ == '__main__':
         print('You passed the test for ComputeMetricsForNestedNER.')
     else:
         print('The result of ComputeMetricsForNestedNER is not right.')
-    
