@@ -265,13 +265,19 @@ if __name__ == '__main__':
     from os.path import expanduser
     from transformers import BertTokenizer
 
-    MODEL_NAME = "../bert-base-chinese"
-    CBLUE_ROOT = "../data/CBLUEDatasets"
+# <<<<<<< HEAD
+    # MODEL_NAME = "../bert-base-chinese"
+    # CBLUE_ROOT = "../data/CBLUEDatasets"
+# =======
+   
+    MODEL_NAME = "/dssg/home/acct-stu/stu915/cmeee/bert-base-chinese"
+    CBLUE_ROOT = "/dssg/home/acct-stu/stu915/cmeee/data/CBLUEDatasets"
+# >>>>>>> 3e4fa51b81ca7e96d1f6381a1e2d1716bda775ca
 
     tokenizer = BertTokenizer.from_pretrained(MODEL_NAME)
     # dataset = EEDataset(CBLUE_ROOT, mode="dev", max_length=10, tokenizer=tokenizer, for_nested_ner=False)
-    dataset = EEDataset(CBLUE_ROOT, mode="dev", max_length=10, tokenizer=tokenizer, for_nested_ner=False)
+    dataset = EEDataset(CBLUE_ROOT, mode="dev", max_length=10, tokenizer=tokenizer, for_nested_ner=True)
 
     batch = [dataset[0], dataset[1], dataset[2]]
-    inputs = CollateFnForEE(pad_token_id=tokenizer.pad_token_id, for_nested_ner=False)(batch)
+    inputs = CollateFnForEE(pad_token_id=tokenizer.pad_token_id, for_nested_ner=True)(batch)
     print(inputs)

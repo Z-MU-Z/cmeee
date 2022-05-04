@@ -159,8 +159,10 @@ List[List[tuple]]:
             if index == max_len:
                 if start_id:
                     print(index)
-                    # cache.append(id2label[batch_labels_or_preds[i][index]][2:])
-                    entity_list.append((start_index, index - 1, id2label[batch_labels_or_preds[i][start_idx]][2:]))
+
+                    #cache.append(id2label[batch_labels_or_preds[i][index]][2:])
+                    entity_list.append((start_idx, index-1, id2label[batch_labels_or_preds[i][start_idx]][2:]))
+
                 break
         batch_entities.append(entity_list)
 
