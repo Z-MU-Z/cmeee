@@ -265,14 +265,9 @@ if __name__ == '__main__':
     from os.path import expanduser
     from transformers import BertTokenizer
 
-# <<<<<<< HEAD
-    # MODEL_NAME = "../bert-base-chinese"
-    # CBLUE_ROOT = "../data/CBLUEDatasets"
-# =======
-   
-    MODEL_NAME = "/dssg/home/acct-stu/stu915/cmeee/bert-base-chinese"
-    CBLUE_ROOT = "/dssg/home/acct-stu/stu915/cmeee/data/CBLUEDatasets"
-# >>>>>>> 3e4fa51b81ca7e96d1f6381a1e2d1716bda775ca
+    MODEL_NAME = "../bert-base-chinese"
+    CBLUE_ROOT = "../data/CBLUEDatasets"
+
 
     tokenizer = BertTokenizer.from_pretrained(MODEL_NAME)
     # dataset = EEDataset(CBLUE_ROOT, mode="dev", max_length=10, tokenizer=tokenizer, for_nested_ner=False)
