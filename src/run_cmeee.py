@@ -15,6 +15,7 @@ from ee_data import EE_label2id2, EEDataset, EE_NUM_LABELS1, EE_NUM_LABELS2, EE_
 from model import BertForCRFHeadNER, BertForLinearHeadNER,  BertForLinearHeadNestedNER, CRFClassifier, LinearClassifier
 from metrics import ComputeMetricsForNER, ComputeMetricsForNestedNER, extract_entities
 from torch.nn import LSTM
+import sys
 
 MODEL_CLASS = {
     'linear': BertForLinearHeadNER, 
@@ -86,6 +87,9 @@ def generate_testing_results(train_args, logger, predictions, test_dataset, for_
 def main(_args: List[str] = None):
     # ===== Parse arguments =====
     logger, train_args, model_args, data_args = get_logger_and_args(__name__, _args)
+
+    logger.info(f"===============> Called command line: \n {' '.join(sys.argv)}")
+    logger.info(f"You can copy paste it to debug")
 
     # ===== Set random seed =====
     set_seed(train_args.seed)
