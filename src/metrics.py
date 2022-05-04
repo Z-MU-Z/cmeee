@@ -25,12 +25,30 @@ class ComputeMetricsForNER: # training_args  `--label_names labels `
         # -100 ==> [PAD]
         predictions[predictions == -100] = EE_label2id[NER_PAD] # [batch, seq_len]
         labels[labels == -100] = EE_label2id[NER_PAD] # [batch, seq_len]
-        
+        #print(predictions[1])
+        #print(labels[0])
         #'''NOTE: You need to finish the code of computing f1-score.
 
         #'''
-
-        return { "f1": None }
+        pred_list = extract_entities(predictions)
+        label_list = extract_entities(labels)
+        #print(pred_list[1])
+        total_true_and_pred = 0
+        total_true = 0
+        total_pred = 0
+        for i in range(len(pred_list)):
+            pred = set(pred_list[i])
+            total_pred += len(pred)
+            true = set(label_list[i])
+            total_true += len(true)
+            true_and_pred = set.intersection(true,pred)
+            total_true_and_pred += len(true_and_pred)
+        #print(total_pred)
+        #print(total_true)
+        #print(total_true_and_pred)
+        f1 = 2*total_true_and_pred/(total_pred+total_true)
+        #print(f1)
+        return { "f1": f1 }
 
 
 class ComputeMetricsForNestedNER: # training_args  `--label_names labels labels2`
@@ -46,7 +64,34 @@ class ComputeMetricsForNestedNER: # training_args  `--label_names labels labels2
 
         # '''
 
-        return { "f1": None }
+        # print(predictions[1,:,1])
+        # print(labels1[1])
+        # print(labels2[1])
+        pred_list1 = extract_entities(predictions[:,:,0],True, True)
+        pred_list2 = extract_entities(predictions[:, :, 1],True, False)
+        label_list1 = extract_entities(labels1, True, True)
+        label_list2 = extract_entities(labels2, True, False)
+        total_true_and_pred = 0
+        total_true = 0
+        total_pred = 0
+        #print(label_list2)
+        #print(pred_list2)
+        for i in range(len(pred_list1)):
+            # print(pred_list1[i])
+            # print(pred_list2[i])
+            pred = set(pred_list1[i])|set(pred_list2[i])
+            #print(pred)
+            total_pred += len(pred)
+            true = set(label_list1[i])|set(label_list2[i])
+            total_true += len(true)
+            true_and_pred = set.intersection(true,pred)
+            total_true_and_pred += len(true_and_pred)
+        f1 = 2 * total_true_and_pred / (total_pred + total_true)
+        # print(total_pred)
+        # print(total_true)
+        # print(total_true_and_pred)
+        # print(f1)
+        return { "f1": f1 }
 
 
 def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = False, first_labels: bool = True) -> List[List[tuple]]:
@@ -64,11 +109,84 @@ def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = F
         id2label = EE_id2label
     else:
         id2label = EE_id2label1 if first_labels else EE_id2label2
-
+    #print(id2label)
+    entity_set = set(_LABEL_RANK.keys())
+    def dicide_type(cache):
+        c = Counter(cache)
+        rank_c = c.most_common(len(list(c.keys())))
+        if len(rank_c) == 1:
+            type = rank_c[0][0]
+        else:
+            i = 0
+            candidate = []
+            max_fre = rank_c[0][1]
+            for i in range(len(rank_c)):
+                if rank_c[i][1] == max_fre:
+                    candidate.append(rank_c[i][0])
+                else:
+                    break
+            #print(candidate)
+            max_rank = -1
+            for type in candidate:
+                if _LABEL_RANK[type] > max_rank:
+                    temp_type = type
+                    max_rank = _LABEL_RANK[type]
+            type = temp_type
+        return type
     batch_entities = []  # List[List[(start_idx, end_idx, type)]]
-    
+    bs , max_len = batch_labels_or_preds.shape
     # '''NOTE: You need to finish this function of extracting entities for generating results and computing metrics.
-    
+    for i in  range(bs):
+        entity_list = []
+        index = 0
+        start_idx = 0
+        start_id = 0
+        #end_id = 0
+        #end_idx = 0
+        cache = []
+        while id2label[batch_labels_or_preds[i][index]] != '[PAD]' and index<max_len:
+            if start_id:
+                # if batch_labels_or_preds[i][index] == start_id:
+                #     entity_list.append((start_index,start_index,id2label[batch_labels_or_preds[i][index]][2:]))
+                #     start_index += 1
+                if id2label[batch_labels_or_preds[i][index]][0] == 'I':
+                    cache.append(id2label[batch_labels_or_preds[i][index]][2:])
+                    index += 1
+                    #print(index)
+                    if index == max_len:
+                        type = dicide_type(cache)
+                        # print(c)
+                        entity_list.append((start_idx, index-1, type))
+
+                    continue
+                else:
+                    end_idx = index-1
+                    #print(id2label[batch_labels_or_preds[i][index]])
+                    #print(cache)
+                    type = dicide_type(cache)
+                    #print(c)
+                    entity_list.append((start_idx, end_idx, type))
+                    start_id = 0
+
+            if id2label[batch_labels_or_preds[i][index]][0] == 'B':
+                cache = []
+                start_id = batch_labels_or_preds[i][index]
+                start_idx = index
+                cache.append(id2label[batch_labels_or_preds[i][index]][2:])
+
+            index += 1
+            if index == max_len:
+                if start_id:
+                    print(index)
+                    #cache.append(id2label[batch_labels_or_preds[i][index]][2:])
+                    entity_list.append((start_index, index-1, id2label[batch_labels_or_preds[i][start_idx]][2:]))
+                break
+        batch_entities.append(entity_list)
+        #print(c)
+        #print(c.most_common(len(list(c.keys()))))
+
+                
+
     # '''
     return batch_entities
 
