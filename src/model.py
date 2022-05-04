@@ -56,12 +56,13 @@ class CRFClassifier(nn.Module):
     def __init__(self, hidden_size: int, num_labels: int, dropout: float):
         super().__init__()
         self.dropout = nn.Dropout(dropout)
+        self.linear = nn.Linear(hidden_size, num_labels)
 
         '''NOTE: This is where to modify for CRF.
-
         '''
+        self.crf = CRF(num_tags=num_labels, batch_first=True)
 
-    def _pred_labels(self):
+    def _pred_labels(self, x, mask=None):
         '''NOTE: This is where to modify for CRF.
         
         You need to finish the code to predict labels.
@@ -69,16 +70,32 @@ class CRFClassifier(nn.Module):
         You can add input arguments.
         
         '''
+        # print(f"In _pred_labels: x.shape {x.shape}, mask shape {mask.shape}")
+        decode_results = self.crf.decode(x, mask=mask)  # now a list of list
+        max_len = max([len(tmp) for tmp in decode_results])
+        tensor_result = torch.zeros(size=(len(decode_results), max_len))
+        for i, batch_item in enumerate(decode_results):
+            tensor_result[i][:len(batch_item)] = torch.tensor(batch_item)
+        return tensor_result.long()
         # return pred_labels
 
     def forward(self, hidden_states, attention_mask, labels=None, no_decode=False, label_pad_token_id=NER_PAD_ID):    
         '''NOTE: This is where to modify for CRF.
-        
         You need to finish the code to compute loss and predict labels.
-
-
         '''
-        # return NEROutputs(loss, pred_labels)
+        attention_mask = attention_mask.bool()
+        x = self.dropout(hidden_states)
+        x = self.linear(x)
+        loss_crf, pred = None, None
+        if labels is None:
+            pred = self._pred_labels(x, attention_mask)
+        else:
+            log_prob = self.crf(x, labels, mask=attention_mask)
+            loss_crf = -log_prob
+            if not no_decode:
+                pred = self._pred_labels(x, attention_mask)
+
+        return NEROutputs(loss_crf, pred)
 
 
 def _group_ner_outputs(output1: NEROutputs, output2: NEROutputs):
