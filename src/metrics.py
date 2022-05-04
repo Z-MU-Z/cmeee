@@ -1,3 +1,5 @@
+import collections
+
 import numpy as np
 
 from typing import List, Union, NamedTuple, Tuple, Counter
@@ -94,8 +96,9 @@ List[List[tuple]]:
         id2label = EE_id2label1 if first_labels else EE_id2label2
     entity_set = set(_LABEL_RANK.keys())
 
-    def dicide_type(cache):
-        c = Counter(cache)
+    def decide_type(cache):
+        # c = Counter(cache)  # NOTE: seems this would be regarded as a bug by pycharm
+        c = collections.Counter(cache)
         rank_c = c.most_common(len(list(c.keys())))
         if len(rank_c) == 1:
             type = rank_c[0][0]
@@ -136,13 +139,13 @@ List[List[tuple]]:
                     cache.append(id2label[batch_labels_or_preds[i][index]][2:])
                     index += 1
                     if index == max_len:
-                        type = dicide_type(cache)
+                        type = decide_type(cache)
                         entity_list.append((start_idx, index - 1, type))
 
                     continue
                 else:
                     end_idx = index - 1
-                    type = dicide_type(cache)
+                    type = decide_type(cache)
                     entity_list.append((start_idx, end_idx, type))
                     start_id = 0
 
