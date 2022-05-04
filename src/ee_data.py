@@ -144,7 +144,10 @@ class EEDataset(Dataset):
         for example in examples:
             if is_test:
                 _sentence_id, text = example.to_ner_task(self.for_nested_ner)
-                label = repeat(None, len(text))
+                if self.for_nested_ner:
+                    label = [repeat(None, len(text))] * 2
+                else:
+                    label = repeat(None, len(text))
             else:
                 _sentence_id, text, label = example.to_ner_task(self.for_nested_ner)
                 # if nested, then label: (list, list)
