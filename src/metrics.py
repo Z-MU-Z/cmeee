@@ -25,14 +25,14 @@ class ComputeMetricsForNER: # training_args  `--label_names labels `
         # -100 ==> [PAD]
         predictions[predictions == -100] = EE_label2id[NER_PAD] # [batch, seq_len]
         labels[labels == -100] = EE_label2id[NER_PAD] # [batch, seq_len]
-        print(predictions[1])
-        print(labels[0])
+        #print(predictions[1])
+        #print(labels[0])
         #'''NOTE: You need to finish the code of computing f1-score.
 
         #'''
         pred_list = extract_entities(predictions)
         label_list = extract_entities(labels)
-        print(pred_list[1])
+        #print(pred_list[1])
         total_true_and_pred = 0
         total_true = 0
         total_pred = 0
@@ -43,11 +43,11 @@ class ComputeMetricsForNER: # training_args  `--label_names labels `
             total_true += len(true)
             true_and_pred = set.intersection(true,pred)
             total_true_and_pred += len(true_and_pred)
-        print(total_pred)
-        print(total_true)
-        print(total_true_and_pred)
+        #print(total_pred)
+        #print(total_true)
+        #print(total_true_and_pred)
         f1 = 2*total_true_and_pred/(total_pred+total_true)
-        print(f1)
+        #print(f1)
         return { "f1": f1 }
 
 
@@ -99,11 +99,11 @@ def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = F
                 else:
                     break
             #print(candidate)
-            min_rank = 100
+            max_rank = -1
             for type in candidate:
-                if _LABEL_RANK[type] < min_rank:
+                if _LABEL_RANK[type] > max_rank:
                     temp_type = type
-                    min_rank = _LABEL_RANK[type]
+                    max_rank = _LABEL_RANK[type]
             type = temp_type
         return type
     batch_entities = []  # List[List[(start_idx, end_idx, type)]]
