@@ -1,0 +1,215 @@
+[05-05 09:40:22] INFO - ==== Train Arguments ==== {
+  "output_dir": "../ckpts/bert_crf_nested_2022",
+  "overwrite_output_dir": true,
+  "do_train": true,
+  "do_eval": true,
+  "do_predict": true,
+  "evaluation_strategy": "steps",
+  "prediction_loss_only": false,
+  "per_device_train_batch_size": 4,
+  "per_device_eval_batch_size": 16,
+  "per_gpu_train_batch_size": null,
+  "per_gpu_eval_batch_size": null,
+  "gradient_accumulation_steps": 4,
+  "eval_accumulation_steps": 500,
+  "eval_delay": 0,
+  "learning_rate": 3e-05,
+  "weight_decay": 3e-06,
+  "adam_beta1": 0.9,
+  "adam_beta2": 0.999,
+  "adam_epsilon": 1e-08,
+  "max_grad_norm": 0.5,
+  "num_train_epochs": 20.0,
+  "max_steps": -1,
+  "lr_scheduler_type": "cosine",
+  "warmup_ratio": 0.05,
+  "warmup_steps": 0,
+  "log_level": -1,
+  "log_level_replica": -1,
+  "log_on_each_node": true,
+  "logging_dir": "../ckpts/bert_crf_nested_2022",
+  "logging_strategy": "steps",
+  "logging_first_step": true,
+  "logging_steps": 200,
+  "logging_nan_inf_filter": true,
+  "save_strategy": "steps",
+  "save_steps": 1000,
+  "save_total_limit": 1,
+  "save_on_each_node": false,
+  "no_cuda": false,
+  "seed": 2022,
+  "data_seed": null,
+  "bf16": false,
+  "fp16": false,
+  "fp16_opt_level": "O1",
+  "half_precision_backend": "auto",
+  "bf16_full_eval": false,
+  "fp16_full_eval": false,
+  "tf32": null,
+  "local_rank": -1,
+  "xpu_backend": null,
+  "tpu_num_cores": null,
+  "tpu_metrics_debug": false,
+  "debug": [],
+  "dataloader_drop_last": false,
+  "eval_steps": 1000,
+  "dataloader_num_workers": 8,
+  "past_index": -1,
+  "run_name": "../ckpts/bert_crf_nested_2022",
+  "disable_tqdm": true,
+  "remove_unused_columns": true,
+  "label_names": [
+    "labels",
+    "labels2"
+  ],
+  "load_best_model_at_end": true,
+  "metric_for_best_model": "f1",
+  "greater_is_better": true,
+  "ignore_data_skip": false,
+  "sharded_ddp": [],
+  "deepspeed": null,
+  "label_smoothing_factor": 0.0,
+  "optim": "adamw_hf",
+  "adafactor": false,
+  "group_by_length": false,
+  "length_column_name": "length",
+  "report_to": [],
+  "ddp_find_unused_parameters": null,
+  "ddp_bucket_cap_mb": null,
+  "dataloader_pin_memory": false,
+  "skip_memory_metrics": true,
+  "use_legacy_prediction_loop": false,
+  "push_to_hub": false,
+  "resume_from_checkpoint": null,
+  "hub_model_id": null,
+  "hub_strategy": "every_save",
+  "hub_token": "<HUB_TOKEN>",
+  "gradient_checkpointing": false,
+  "fp16_backend": "auto",
+  "push_to_hub_model_id": null,
+  "push_to_hub_organization": null,
+  "push_to_hub_token": "<PUSH_TO_HUB_TOKEN>",
+  "_n_gpu": 1,
+  "mp_parameters": ""
+}
+[05-05 09:40:22] INFO - ==== Model Arguments ==== {
+  "model_type": "bert",
+  "head_type": "crf_nested",
+  "model_path": "../bert-base-chinese",
+  "init_model": 0
+}
+[05-05 09:40:22] INFO - ==== Data Arguments ==== {
+  "cblue_root": "../data/CBLUEDatasets",
+  "max_length": 512
+}
+[05-05 09:40:22] INFO - ===============> Called command line: 
+ run_cmeee.py --output_dir ../ckpts/bert_crf_nested_2022 --report_to none --overwrite_output_dir true --do_train true --do_eval true --do_predict true --dataloader_pin_memory False --per_device_train_batch_size 4 --per_device_eval_batch_size 16 --gradient_accumulation_steps 4 --eval_accumulation_steps 500 --learning_rate 3e-5 --weight_decay 3e-6 --max_grad_norm 0.5 --lr_scheduler_type cosine --num_train_epochs 20 --warmup_ratio 0.05 --logging_dir ../ckpts/bert_crf_nested_2022 --logging_strategy steps --logging_first_step true --logging_steps 200 --save_strategy steps --save_steps 1000 --evaluation_strategy steps --eval_steps 1000 --save_total_limit 1 --no_cuda false --seed 2022 --dataloader_num_workers 8 --disable_tqdm true --load_best_model_at_end true --metric_for_best_model f1 --greater_is_better true --model_type bert --model_path ../bert-base-chinese --head_type crf_nested --cblue_root ../data/CBLUEDatasets --max_length 512 --label_names labels labels2
+[05-05 09:40:22] INFO - You can copy paste it to debug
+[05-05 09:41:17] INFO - Trainset: 15000 samples
+[05-05 09:41:17] INFO - Devset: 5000 samples
+[05-05 09:41:20] INFO - ***** Running training *****
+[05-05 09:41:20] INFO -   Num examples = 15000
+[05-05 09:41:20] INFO -   Num Epochs = 20
+[05-05 09:41:20] INFO -   Instantaneous batch size per device = 4
+[05-05 09:41:20] INFO -   Total train batch size (w. parallel, distributed & accumulation) = 16
+[05-05 09:41:20] INFO -   Gradient Accumulation steps = 4
+[05-05 09:41:20] INFO -   Total optimization steps = 18740
+[05-05 09:49:05] INFO - ***** Running Evaluation *****
+[05-05 09:49:05] INFO -   Num examples = 5000
+[05-05 09:49:05] INFO -   Batch size = 16
+[05-05 09:49:43] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-1000
+[05-05 09:57:23] INFO - ***** Running Evaluation *****
+[05-05 09:57:24] INFO -   Num examples = 5000
+[05-05 09:57:24] INFO -   Batch size = 16
+[05-05 09:58:01] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-2000
+[05-05 09:58:03] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-1000] due to args.save_total_limit
+[05-05 10:05:46] INFO - ***** Running Evaluation *****
+[05-05 10:05:46] INFO -   Num examples = 5000
+[05-05 10:05:46] INFO -   Batch size = 16
+[05-05 10:06:24] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-3000
+[05-05 10:07:01] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-2000] due to args.save_total_limit
+[05-05 10:14:35] INFO - ***** Running Evaluation *****
+[05-05 10:14:35] INFO -   Num examples = 5000
+[05-05 10:14:35] INFO -   Batch size = 16
+[05-05 10:15:12] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-4000
+[05-05 10:23:24] INFO - ***** Running Evaluation *****
+[05-05 10:23:24] INFO -   Num examples = 5000
+[05-05 10:23:24] INFO -   Batch size = 16
+[05-05 10:24:02] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-5000
+[05-05 10:24:03] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-4000] due to args.save_total_limit
+[05-05 10:31:41] INFO - ***** Running Evaluation *****
+[05-05 10:31:41] INFO -   Num examples = 5000
+[05-05 10:31:41] INFO -   Batch size = 16
+[05-05 10:32:19] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-6000
+[05-05 10:32:40] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-5000] due to args.save_total_limit
+[05-05 10:40:21] INFO - ***** Running Evaluation *****
+[05-05 10:40:21] INFO -   Num examples = 5000
+[05-05 10:40:21] INFO -   Batch size = 16
+[05-05 10:40:59] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-7000
+[05-05 10:41:01] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-3000] due to args.save_total_limit
+[05-05 10:41:01] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-6000] due to args.save_total_limit
+[05-05 10:48:39] INFO - ***** Running Evaluation *****
+[05-05 10:48:39] INFO -   Num examples = 5000
+[05-05 10:48:39] INFO -   Batch size = 16
+[05-05 10:49:17] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-8000
+[05-05 10:49:19] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-7000] due to args.save_total_limit
+[05-05 10:56:58] INFO - ***** Running Evaluation *****
+[05-05 10:56:58] INFO -   Num examples = 5000
+[05-05 10:56:58] INFO -   Batch size = 16
+[05-05 10:57:36] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-9000
+[05-05 11:05:12] INFO - ***** Running Evaluation *****
+[05-05 11:05:12] INFO -   Num examples = 5000
+[05-05 11:05:12] INFO -   Batch size = 16
+[05-05 11:05:50] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-10000
+[05-05 11:05:51] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-9000] due to args.save_total_limit
+[05-05 11:13:31] INFO - ***** Running Evaluation *****
+[05-05 11:13:31] INFO -   Num examples = 5000
+[05-05 11:13:31] INFO -   Batch size = 16
+[05-05 11:14:10] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-11000
+[05-05 11:14:12] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-10000] due to args.save_total_limit
+[05-05 11:21:50] INFO - ***** Running Evaluation *****
+[05-05 11:21:50] INFO -   Num examples = 5000
+[05-05 11:21:50] INFO -   Batch size = 16
+[05-05 11:22:28] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-12000
+[05-05 11:22:29] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-8000] due to args.save_total_limit
+[05-05 11:22:29] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-11000] due to args.save_total_limit
+[05-05 11:30:10] INFO - ***** Running Evaluation *****
+[05-05 11:30:10] INFO -   Num examples = 5000
+[05-05 11:30:10] INFO -   Batch size = 16
+[05-05 11:30:48] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-13000
+[05-05 11:38:26] INFO - ***** Running Evaluation *****
+[05-05 11:38:26] INFO -   Num examples = 5000
+[05-05 11:38:26] INFO -   Batch size = 16
+[05-05 11:39:04] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-14000
+[05-05 11:39:05] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-13000] due to args.save_total_limit
+[05-05 11:46:50] INFO - ***** Running Evaluation *****
+[05-05 11:46:50] INFO -   Num examples = 5000
+[05-05 11:46:50] INFO -   Batch size = 16
+[05-05 11:47:28] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-15000
+[05-05 11:47:29] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-12000] due to args.save_total_limit
+[05-05 11:47:29] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-14000] due to args.save_total_limit
+[05-05 11:55:06] INFO - ***** Running Evaluation *****
+[05-05 11:55:06] INFO -   Num examples = 5000
+[05-05 11:55:06] INFO -   Batch size = 16
+[05-05 11:55:45] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-16000
+[05-05 11:55:46] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-15000] due to args.save_total_limit
+[05-05 12:03:28] INFO - ***** Running Evaluation *****
+[05-05 12:03:28] INFO -   Num examples = 5000
+[05-05 12:03:28] INFO -   Batch size = 16
+[05-05 12:04:05] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-17000
+[05-05 12:11:43] INFO - ***** Running Evaluation *****
+[05-05 12:11:43] INFO -   Num examples = 5000
+[05-05 12:11:43] INFO -   Batch size = 16
+[05-05 12:12:21] INFO - Saving model checkpoint to ../ckpts/bert_crf_nested_2022/checkpoint-18000
+[05-05 12:12:23] INFO - Deleting older checkpoint [../ckpts/bert_crf_nested_2022/checkpoint-17000] due to args.save_total_limit
+[05-05 12:17:59] INFO - 
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+[05-05 12:17:59] INFO - Loading best model from ../ckpts/bert_crf_nested_2022/checkpoint-16000 (score: 0.6306336834971196).
+[05-05 12:18:03] INFO - Testset: 3000 samples
+[05-05 12:18:03] INFO - ***** Running Prediction *****
+[05-05 12:18:03] INFO -   Num examples = 3000
+[05-05 12:18:03] INFO -   Batch size = 16
+[05-05 12:18:12] INFO - `CMeEE_test.json` saved
