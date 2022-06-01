@@ -177,7 +177,7 @@ if __name__ == '__main__':
     labels = np.load('../test_files/labels.npy')
 
     metrics = ComputeMetricsForNER()(EvalPrediction(predictions, labels))
-
+    #print(metrics['f1'])
     if abs(metrics['f1'] - 0.606179116) < 1e-5:
         print('You passed the test for ComputeMetricsForNER.')
     else:
@@ -189,7 +189,7 @@ if __name__ == '__main__':
     labels2 = np.load('../test_files/labels2_nested.npy')
 
     metrics = ComputeMetricsForNestedNER()(EvalPrediction(predictions, (labels1, labels2)))
-
+    #print(metrics['f1'])
     if abs(metrics['f1'] - 0.60333644) < 1e-5:
         print('You passed the test for ComputeMetricsForNestedNER.')
     else:

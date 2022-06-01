@@ -1,3 +1,4 @@
 bert-base-chinese/
 *.bin
 src/__pycache__/
+ckpts/
