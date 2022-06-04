@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=run_cmeee
-#SBATCH --partition=dgx2
+#SBATCH --partition=a100 
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH --ntasks-per-node=1
@@ -11,8 +11,8 @@
 
 CBLUE_ROOT=../data/CBLUEDatasets
   
-MODEL_TYPE=macbert
-MODEL_PATH=9pinus/macbert-base-chinese-medical-collation
+MODEL_TYPE=roberta_large
+MODEL_PATH=clue/roberta_chinese_large
 SEED=2022
 LABEL_NAMES=(labels)
 TASK_ID=3
@@ -85,6 +85,7 @@ python run_cmeee.py \
   --model_type                  ${MODEL_TYPE} \
   --model_path                  ${MODEL_PATH} \
   --head_type                   ${HEAD_TYPE} \
+  --prompt_tuning               false \
   \
   --cblue_root                  ${CBLUE_ROOT} \
   --max_length                  512 \

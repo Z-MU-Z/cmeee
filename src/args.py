@@ -20,6 +20,7 @@ class ModelConstructArgs(_Args):
     head_type: str = field(metadata={"choices": ["linear", "linear_nested", "crf", "crf_nested"], "help": "Type of head"})
     model_path: Optional[str] = field(default=None, metadata={"help": "Pretrained model path"})
     init_model: Optional[int] = field(default=0, metadata={"choices": [0, 1], "help": "Init models' parameters"})
+    prompt_tuning: Optional[bool] = field(default=False, metadata={"help": "Init models' parameters"})
     
 
 @dataclass

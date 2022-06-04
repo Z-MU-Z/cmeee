@@ -17,14 +17,15 @@ from model import BertForCRFHeadNER, BertForLinearHeadNER,  BertForLinearHeadNes
 from metrics import ComputeMetricsForNER, ComputeMetricsForNestedNER, extract_entities
 from torch.nn import LSTM
 import sys
-
+from model import *
 MODEL_CLASS = {
     'linear': BertForLinearHeadNER, 
     'linear_nested': BertForLinearHeadNestedNER,
     'crf': BertForCRFHeadNER,
     'crf_nested':BertForCRFHeadNestedNER,
 }
-
+n_tokens = 20
+initialize_from_vocab = True
 def get_logger_and_args(logger_name: str, _args: List[str] = None):
     parser = HfArgumentParser([TrainingArguments, ModelConstructArgs, CBLUEDataArgs])
     train_args, model_args, data_args = parser.parse_args_into_dataclasses(_args)
@@ -50,9 +51,16 @@ def get_model_with_tokenizer(model_args):
     if 'nested' not in model_args.head_type:
         model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS)
     else:
-        model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS1, num_labels2=EE_NUM_LABELS2)
-    
-    tokenizer = BertTokenizer.from_pretrained(model_args.model_path)
+        #model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS1, num_labels2=EE_NUM_LABELS2)
+        #model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS1,num_labels2=EE_NUM_LABELS2,cache_dir = '/dssg/home/acct-stu/stu915/.cache/huggingface/transformers',local_files_only = True)
+        model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS1,
+                                            num_labels2=EE_NUM_LABELS2,
+                                            cache_dir='/dssg/home/acct-stu/stu915/.cache/huggingface/transformers',
+                                            local_files_only=True
+                                            )
+    tokenizer = BertTokenizer.from_pretrained(model_args.model_path,cache_dir = '/dssg/home/acct-stu/stu915/.cache/huggingface/transformers',
+                                              local_files_only = True
+                                              )
     return model, tokenizer
 
 
@@ -99,7 +107,12 @@ def main(_args: List[str] = None):
     # ===== Get models =====
     model, tokenizer = get_model_with_tokenizer(model_args)
     for_nested_ner = 'nested' in model_args.head_type
-
+    if model_args.prompt_tuning:
+        s_wte = SoftEmbedding(model.get_input_embeddings(),
+                              n_tokens=n_tokens,
+                              initialize_from_vocab=initialize_from_vocab)
+        model.set_input_embeddings(s_wte)
+        print(s_wte.learned_embedding)
     # ===== Get datasets =====
     if train_args.do_train:
         train_dataset = EEDataset(data_args.cblue_root, "train", data_args.max_length, tokenizer, for_nested_ner=for_nested_ner)
@@ -127,7 +140,8 @@ def main(_args: List[str] = None):
             trainer.train()
         except KeyboardInterrupt:
             logger.info("Keyboard interrupt")
-
+    print(s_wte.learned_embedding)
+    print(model)
     if train_args.do_predict:
         test_dataset = EEDataset(data_args.cblue_root, "test", data_args.max_length, tokenizer, for_nested_ner=for_nested_ner)
         logger.info(f"Testset: {len(test_dataset)} samples")

@@ -85,6 +85,7 @@ python run_cmeee.py \
   --model_type                  ${MODEL_TYPE} \
   --model_path                  ${MODEL_PATH} \
   --head_type                   ${HEAD_TYPE} \
+  --prompt_tuning               true \
   \
   --cblue_root                  ${CBLUE_ROOT} \
   --max_length                  512 \
