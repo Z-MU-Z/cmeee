@@ -112,6 +112,8 @@ def main(_args: List[str] = None):
                               n_tokens=n_tokens,
                               initialize_from_vocab=initialize_from_vocab)
         model.set_input_embeddings(s_wte)
+        for param in model.bert.encoder.parameters():
+            param.requires_grad = False
         print(s_wte.learned_embedding)
     # ===== Get datasets =====
     if train_args.do_train:
