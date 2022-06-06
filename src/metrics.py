@@ -28,8 +28,6 @@ class ComputeMetricsForNER:  # training_args  `--label_names labels `
         predictions[predictions == -100] = EE_label2id[NER_PAD]  # [batch, seq_len]
         labels[labels == -100] = EE_label2id[NER_PAD]  # [batch, seq_len]
         # '''NOTE: You need to finish the code of computing f1-score.
-
-        # '''
         pred_list = extract_entities(predictions)
         label_list = extract_entities(labels)
         total_true_and_pred = 0
@@ -57,8 +55,6 @@ class ComputeMetricsForNestedNER:  # training_args  `--label_names labels labels
 
         # '''NOTE: You need to finish the code of computing f1-score.
 
-        # '''
-
         pred_list1 = extract_entities(predictions[:, :, 0], True, True)
         pred_list2 = extract_entities(predictions[:, :, 1], True, False)
         label_list1 = extract_entities(labels1, True, True)
@@ -79,7 +75,7 @@ class ComputeMetricsForNestedNER:  # training_args  `--label_names labels labels
 
 
 def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = False, first_labels: bool = True) -> \
-List[List[tuple]]:
+        List[List[tuple]]:
     """
     本评测任务采用严格 Micro-F1作为主评测指标, 即要求预测出的 实体的起始、结束下标，实体类型精准匹配才算预测正确。
     
@@ -94,16 +90,13 @@ List[List[tuple]]:
         id2label = EE_id2label
     else:
         id2label = EE_id2label1 if first_labels else EE_id2label2
-    entity_set = set(_LABEL_RANK.keys())
 
     def decide_type(cache):
-        # c = Counter(cache)  # NOTE: seems this would be regarded as a bug by pycharm
         c = collections.Counter(cache)
         rank_c = c.most_common(len(list(c.keys())))
         if len(rank_c) == 1:
             type = rank_c[0][0]
         else:
-            i = 0
             candidate = []
             max_fre = rank_c[0][1]
             for i in range(len(rank_c)):
@@ -127,14 +120,9 @@ List[List[tuple]]:
         index = 0
         start_idx = 0
         start_id = 0
-        # end_id = 0
-        # end_idx = 0
         cache = []
         while id2label[batch_labels_or_preds[i][index]] != '[PAD]' and index < max_len:
             if start_id:
-                # if batch_labels_or_preds[i][index] == start_id:
-                #     entity_list.append((start_index,start_index,id2label[batch_labels_or_preds[i][index]][2:]))
-                #     start_index += 1
                 if id2label[batch_labels_or_preds[i][index]][0] == 'I':
                     cache.append(id2label[batch_labels_or_preds[i][index]][2:])
                     index += 1
@@ -158,15 +146,10 @@ List[List[tuple]]:
             index += 1
             if index == max_len:
                 if start_id:
-                    print(index)
-
-                    #cache.append(id2label[batch_labels_or_preds[i][index]][2:])
-                    entity_list.append((start_idx, index-1, id2label[batch_labels_or_preds[i][start_idx]][2:]))
+                    entity_list.append((start_idx, index - 1, id2label[batch_labels_or_preds[i][start_idx]][2:]))
 
                 break
         batch_entities.append(entity_list)
-
-    # '''
     return batch_entities
 
 
