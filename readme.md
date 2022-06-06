@@ -1,9 +1,16 @@
-id2label
-['[PAD]', 'O', 'B-dep', 'I-dep', 'B-equ', 'I-equ', 'B-mic', 'I-mic', 'B-ite', 'I-ite', 'B-dru', 'I-dru', 'B-pro', 'I-pro', 'B-sym', 'I-sym', 'B-dis', 'I-dis', 'B-bod', 'I-bod']
+# CMeEE Project 1
 
-label_rank
-{'dep': 0, 'equ': 1, 'mic': 2, 'ite': 3, 'dru': 4, 'pro': 5, 'sym': 6, 'dis': 7, 'bod': 8}
 
-nested_id2label
-['[PAD]', 'O', 'B-dep', 'I-dep', 'B-equ', 'I-equ', 'B-mic', 'I-mic', 'B-ite', 'I-ite', 'B-dru', 'I-dru', 'B-pro', 'I-pro', 'B-dis', 'I-dis', 'B-bod', 'I-bod']
-['[PAD]', 'O', 'B-sym', 'I-sym']
+代码运行方式与助教提供的无异。即更改`run_cmeee2.sbatch`中的`TASK_ID`，来选择是否用嵌套处理、是否CRF。
+
+---
+
+参考CBLUE上的测试结果：
+
+| 模型            | F1-score |
+| --------------- | -------- |
+| Linear          | 0.62174  |
+| CRF             | 0.62417  |
+| Linear+嵌套处理 | 0.62279  |
+| CRF+嵌套处理    | 0.63063  |
+
