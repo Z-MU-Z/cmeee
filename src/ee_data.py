@@ -157,20 +157,11 @@ class InputExample:
         #print(bias,len(self.text),len(tem_text))
         assert len(self.text)+bias == len(tem_text),"长度不一致，字词缺失？"
         self.text = tem_text
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def to_dict(self):
+        result = {}
+        result["text"] = self.text
+        result["entities"] = self.entities
+        return result
 
 
 class EEDataloader:
@@ -216,8 +207,12 @@ class EEDataset(Dataset):
             self.examples = EEDataloader(cblue_root).get_data(mode)  # get original data
             # print(self.examples[0].text)
             # print(self.examples[0].entities)
+            json_list = []
             for i in range(len(self.examples)):
                 self.examples[i].back_translation(5)
+                json_list.append(self.examples[i].to_dict())
+                with open('../data/test.json', encoding='utf-8', mode='w') as f1:
+                    json.dump(json_list, f1, indent=4, ensure_ascii=False)
             self.data = self._preprocess(self.examples, tokenizer)  # preprocess
             with open(cache_file, 'wb') as f:
                 pickle.dump((self.examples, self.data), f)
