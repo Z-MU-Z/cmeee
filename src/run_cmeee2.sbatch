@@ -11,7 +11,7 @@
 
 CBLUE_ROOT=../data/CBLUEDatasets
   
-MODEL_TYPE=bert
+MODEL_TYPE=bert_test
 MODEL_PATH=../bert-base-chinese
 SEED=2022
 LABEL_NAMES=(labels)
@@ -80,12 +80,12 @@ python run_cmeee.py \
   --disable_tqdm                true \
   --load_best_model_at_end      true \
   --metric_for_best_model       f1 \
-  --greater_is_better           true \
+  --greater_is_better           false \
   \
   --model_type                  ${MODEL_TYPE} \
   --model_path                  ${MODEL_PATH} \
   --head_type                   ${HEAD_TYPE} \
-  --prompt_tuning               true \
+  --prompt_tuning               false \
   \
   --cblue_root                  ${CBLUE_ROOT} \
   --max_length                  512 \

@@ -85,6 +85,92 @@ class InputExample:
                 return self.sentence_id, self.text, label
             else:
                 return self.sentence_id, self.text, (label1, label2)
+    def back_translation(self,min_lenth=0): #进行backtranslate的最短长度
+        mask = np.zeros(len(self.text))
+        for entity in self.entities:
+            start_idx = entity["start_idx"]
+            end_idx = entity["end_idx"]
+            entity_type = entity["type"]
+
+            assert entity["entity"] == self.text[start_idx: end_idx + 1], f"{entity} mismatch: `{self.text}`"
+            mask[start_idx:end_idx+1] = 1
+
+        #print(mask)
+        not_entities = []
+        start = -1
+        end = -1
+        flag = 0
+        for i in range(len(self.text)):
+            #print(i)
+            if mask[i] == 0:
+                if flag == 0: #遇到了新的非实体
+                    start = i
+                    flag = 1
+                if flag == 1:
+                    continue
+            if mask[i]:
+                if flag == 0: #still in entity
+                    continue
+                if flag == 1:
+                    flag = 0
+                    not_entities.append((start,i-1))
+                    #print(start, i - 1)
+        if flag == 1:
+            not_entities.append((start,len(self.text)-1))
+        #print(self.text)
+        #print(self.entities)
+        #print(not_entities)#相当于记录了所有非实体区间
+        tem_text = ''
+        last_end = 0
+        bias = 0
+        entity_index = 0
+        for i in range(len(not_entities)):
+            start, end = not_entities[i]
+            if last_end < start:#为了应对一开始0的情况
+                while(self.entities[entity_index]["end_idx"]<start):#属于这块区域内的实体
+                    self.entities[entity_index]["end_idx"] += bias
+                    self.entities[entity_index]["start_idx"] += bias #进行相对位置的偏移
+                    entity_index += 1
+                    #print(entity_index)
+                    if entity_index == len(self.entities):
+                        break
+
+                tem_text += self.text[last_end:start]  # 保留实体部分
+            last_end = end + 1
+            if end - start + 1 < min_lenth: #太短就不翻译了
+                tem_text += self.text[start:end+1]
+
+            else:
+                #result = translate(self.text[start:end+1])
+                result = '只是为了测试'
+                bias += len(result) - (end + 1 - start)
+                tem_text += result
+        while entity_index < len(self.entities):
+            self.entities[entity_index]["end_idx"] += bias
+            self.entities[entity_index]["start_idx"] += bias  # 进行相对位置的偏移
+            entity_index += 1
+            tem_text += self.text[last_end:len(self.text)]
+            #print(tem_text)
+        print(self.text)
+        print(self.entities)
+        print(tem_text)
+        #print(bias,len(self.text),len(tem_text))
+        assert len(self.text)+bias == len(tem_text),"长度不一致，字词缺失？"
+        self.text = tem_text
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class EEDataloader:
@@ -128,6 +214,10 @@ class EEDataset(Dataset):
             logger.info(f"Load cached data from {cache_file}")
         else:
             self.examples = EEDataloader(cblue_root).get_data(mode)  # get original data
+            # print(self.examples[0].text)
+            # print(self.examples[0].entities)
+            for i in range(len(self.examples)):
+                self.examples[i].back_translation(5)
             self.data = self._preprocess(self.examples, tokenizer)  # preprocess
             with open(cache_file, 'wb') as f:
                 pickle.dump((self.examples, self.data), f)

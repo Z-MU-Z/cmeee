@@ -114,7 +114,7 @@ def main(_args: List[str] = None):
         model.set_input_embeddings(s_wte)
         for param in model.bert.encoder.parameters():
             param.requires_grad = False
-        print(s_wte.learned_embedding)
+        #print(s_wte.learned_embedding)
     # ===== Get datasets =====
     if train_args.do_train:
         train_dataset = EEDataset(data_args.cblue_root, "train", data_args.max_length, tokenizer, for_nested_ner=for_nested_ner)
@@ -142,8 +142,7 @@ def main(_args: List[str] = None):
             trainer.train()
         except KeyboardInterrupt:
             logger.info("Keyboard interrupt")
-    print(s_wte.learned_embedding)
-    print(model)
+    #print(s_wte.learned_embedding)
     if train_args.do_predict:
         test_dataset = EEDataset(data_args.cblue_root, "test", data_args.max_length, tokenizer, for_nested_ner=for_nested_ner)
         logger.info(f"Testset: {len(test_dataset)} samples")
