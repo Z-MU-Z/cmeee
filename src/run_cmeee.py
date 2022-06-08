@@ -14,7 +14,7 @@ from logger import get_logger
 from ee_data import EE_label2id2, EEDataset, EE_NUM_LABELS1, EE_NUM_LABELS2, EE_NUM_LABELS, CollateFnForEE, \
     EE_label2id1, NER_PAD, EE_label2id, EEWordDataset, EEDatasetWordChar, CollateFnForEEWordChar
 from model import BertForCRFHeadNER, BertForLinearHeadNER, BertForLinearHeadNestedNER, CRFClassifier, LinearClassifier, \
-    BertForCRFHeadNestedNER, BertForCRFHeadNestedNERWordChar
+    BertForCRFHeadNestedNER, BertForCRFHeadNestedNERWordChar, BertForCRFHeadNestedNERWordCharAdd
 from metrics import ComputeMetricsForNER, ComputeMetricsForNestedNER, extract_entities
 from torch.nn import LSTM
 import sys
@@ -64,7 +64,8 @@ def get_model_with_tokenizer(model_args):
     return model, tokenizer
 
 
-def generate_testing_results(train_args, logger, predictions, test_dataset, for_nested_ner=False, use_word=False, which_set='test'):
+def generate_testing_results(train_args, logger, predictions, test_dataset, for_nested_ner=False, use_word=False,
+                             which_set='test'):
     if use_word:
         test_dataset = test_dataset.char_dataset
     assert len(predictions) == len(test_dataset.examples), \
@@ -141,10 +142,16 @@ def main(_args: List[str] = None):
         word_tokenizer = AlbertTokenizer.from_pretrained(model_args.word_model_path)
         # char_bert_config = BertConfig.from_pretrained(model_args.model_path)
         word_bert_config = BertConfig.from_pretrained(model_args.word_model_path)
-        model = BertForCRFHeadNestedNERWordChar.from_pretrained(model_args.model_path,
-                                                                config_word=word_bert_config,
-                                                                num_labels1=EE_NUM_LABELS1,
-                                                                num_labels2=EE_NUM_LABELS2)
+        if model_args.use_word_add:
+            model = BertForCRFHeadNestedNERWordCharAdd.from_pretrained(model_args.model_path,
+                                                                       config_word=word_bert_config,
+                                                                       num_labels1=EE_NUM_LABELS1,
+                                                                       num_labels2=EE_NUM_LABELS2)
+        else:
+            model = BertForCRFHeadNestedNERWordChar.from_pretrained(model_args.model_path,
+                                                                    config_word=word_bert_config,
+                                                                    num_labels1=EE_NUM_LABELS1,
+                                                                    num_labels2=EE_NUM_LABELS2)
     for_nested_ner = 'nested' in model_args.head_type
 
     # ===== Get datasets =====
@@ -240,14 +247,16 @@ def main(_args: List[str] = None):
         test_dataset = EEDataset(data_args.cblue_root, set_to_do_predict, data_args.max_length, tokenizer,
                                  for_nested_ner=for_nested_ner)
         if model_args.use_word:
-            test_word_dataset = EEWordDataset(data_args.cblue_root, set_to_do_predict, data_args.max_length, word_tokenizer,
+            test_word_dataset = EEWordDataset(data_args.cblue_root, set_to_do_predict, data_args.max_length,
+                                              word_tokenizer,
                                               for_nested_ner=for_nested_ner)
             test_dataset = EEDatasetWordChar(test_dataset, test_word_dataset)
         logger.info(f"Testset: {len(test_dataset)} samples")
         print(test_dataset, model_args.use_word)
         # np.ndarray, None, None
         predictions, _labels, _metrics = trainer.predict(test_dataset, metric_key_prefix="predict")
-        generate_testing_results(train_args, logger, predictions, test_dataset, for_nested_ner=for_nested_ner, use_word=model_args.use_word)
+        generate_testing_results(train_args, logger, predictions, test_dataset, for_nested_ner=for_nested_ner,
+                                 use_word=model_args.use_word)
 
 
 if __name__ == '__main__':

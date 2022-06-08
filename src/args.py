@@ -20,6 +20,7 @@ class ModelConstructArgs(_Args):
     head_type: str = field(metadata={"choices": ["linear", "linear_nested", "crf", "crf_nested"], "help": "Type of head"})
     use_word: bool = field(metadata={"help": "whether to use word concatenated with char"})
     resumed_training: bool = field(metadata={'help': "whether to resume from existing checkpoint"})
+    use_word_add: bool = field(default=False, metadata={"help": "whether to use word added with char"})
     model_path: Optional[str] = field(default=None, metadata={"help": "Pretrained model path"})
     word_model_path: Optional[str] = field(default=None, metadata={'help': "Pretrained word-level model path"})
     init_model: Optional[int] = field(default=0, metadata={"choices": [0, 1], "help": "Init models' parameters"})

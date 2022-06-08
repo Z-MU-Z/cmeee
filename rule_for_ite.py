@@ -6,66 +6,69 @@ from tqdm import trange, tqdm
 import os
 
 
-def get_deps_and_filter(train_json):
+def get_ites_and_filter(train_json):
     with open(train_json, encoding='utf-8') as f:
         train_set = json.load(f)
 
-    dep_names = []
+    ite_names = []
     for item in train_set:
         for ent in item['entities']:
-            if ent['type'] == 'dep':
-                dep_names.append(ent['entity'])
-    dep_names = list(set(dep_names))
-    dep_itself_count = [0 for _ in dep_names]
-    dep_other_count = [0 for _ in dep_names]
-    dep_not_in_ent_count = [0 for _ in dep_names]
+            if ent['type'] == 'ite':
+                ite_names.append(ent['entity'])
+    ite_names = list(set(ite_names))
+    print(f"There are {len(ite_names)} unique ite names")
+    ite_itself_count = [0 for _ in ite_names]
+    ite_other_count = [0 for _ in ite_names]
+    ite_not_in_ent_count = [0 for _ in ite_names]
 
     # delete those who exist in other entities more than itself
-    for i, dn in tqdm(enumerate(copy.deepcopy(dep_names))):
+    for i, dn in tqdm(enumerate(copy.deepcopy(ite_names))):
         # deleted = False
         for item in train_set:
             # if not deleted:
             appear_in_ent_num = 0
             for ent in item['entities']:
-                if (dn in ent['entity']) and (ent['type'] != 'dep'):
-                    dep_other_count[i] += 1
+                if (dn in ent['entity']) and (ent['type'] != 'ite'):
+                    ite_other_count[i] += 1
                     appear_in_ent_num += 1
-                if (ent['type'] == 'dep') and (dn == ent['entity']):
-                    dep_itself_count[i] += 1
+                if (ent['type'] == 'ite') and (dn == ent['entity']):
+                    ite_itself_count[i] += 1
                     appear_in_ent_num += 1
 
-                # TODO: stat the case that this matched dep instance is not found by any entity
+                # TODO: stat the case that this matched ite instance is not found by any entity
                 # for example, 临床 may occur frequently
             text = item['text']
             itr = re.finditer(dn, text)
             appear_num = len(list(itr))
             appear_not_in_ent_num = appear_num - appear_in_ent_num
-            dep_not_in_ent_count[i] += appear_not_in_ent_num
+            # if appear_not_in_ent_num<0:
+            #     print()
+            ite_not_in_ent_count[i] += appear_not_in_ent_num
 
-    print(dep_itself_count)
-    print(dep_other_count)
-    print(dep_not_in_ent_count)
+    print(ite_itself_count)
+    print(ite_other_count)
+    print(ite_not_in_ent_count)
 
-    keep_dep_names = []
-    for i in range(len(dep_names)):
-        if dep_itself_count[i] <= dep_other_count[i] + dep_not_in_ent_count[i]:
+    keep_ite_names = []
+    for i in range(len(ite_names)):
+        if ite_itself_count[i] <= 2 * (ite_other_count[i] + ite_not_in_ent_count[i]):
             continue
         else:
-            keep_dep_names.append(dep_names[i])
+            keep_ite_names.append(ite_names[i])
     # exit(1)
-    print(f"Remaining: {len(keep_dep_names)} out of {len(dep_names)}")
-    return keep_dep_names
+    print(f"Remaining: {len(keep_ite_names)} out of {len(ite_names)}")
+    return keep_ite_names
 
 
-def update_json(to_be_updated, dep_names):
+def update_json(to_be_updated, ite_names):
     with open(to_be_updated, encoding='utf-8') as f:
         data = json.load(f)
     for i in trange(len(data)):
         text = data[i]['text']
         existing_ents = data[i]['entities']
-        for name in dep_names:
+        for name in ite_names:
             itr = re.finditer(name, text)
-            for f in itr:  # for all the founded matches to this dep-name in this text
+            for f in itr:  # for all the founded matches to this ite-name in this text
                 start_idx, end_idx = f.span()
                 end_idx = end_idx - 1
                 find_cover = False
@@ -80,7 +83,7 @@ def update_json(to_be_updated, dep_names):
                     existing_ents.append({
                             "start_idx": f.span()[0],
                             "end_idx": f.span()[1] - 1,
-                            "type": "dep",
+                            "type": "ite",
                             "entity": name
                         })
         data[i]['entities'] = existing_ents
@@ -88,19 +91,19 @@ def update_json(to_be_updated, dep_names):
 
 
 if __name__ == '__main__':
-    depnames = get_deps_and_filter(train_json="data/CBLUEDatasets/CMeEE/CMeEE_train.json")
-    print(depnames)
+    itenames = get_ites_and_filter(train_json="data/CBLUEDatasets/CMeEE/CMeEE_train.json")
+    print(itenames)
     # exit(1)
-    # depnames.pop(depnames.index("临床"))
+    # itenames.pop(itenames.index("临床"))
 
     # ============== update some json ==========================
-    to_be_updated = "ckpts/bert_crf_nested_2022/CMeEE_test.json"
+    to_be_updated = "ckpts/baseline_crf_nested/CMeEE_dev.json"
     # to_be_updated = "ckpts/global_pointer/CMeEE_dev.json"
 
-    updated = update_json(to_be_updated, depnames)
+    updated = update_json(to_be_updated, itenames)
     dirname = os.path.dirname(to_be_updated)
     basename = os.path.basename(to_be_updated)
     basename_withouth_suffix = '.'.join(basename.split('.')[:-1])
     suffix = basename.split(".")[-1]
-    with open(f"{dirname}/{basename_withouth_suffix}_updated_by_dep.{suffix}", 'w', encoding='utf-8') as f:
-        json.dump(updated, f, ensure_ascii=False, indent=2)
+    with open(f"{dirname}/{basename_withouth_suffix}_updated_by_ite.{suffix}", 'w', encoding='utf-8') as f:
+        json.dump(updated, f, ensure_ascii=False, indent=4)
