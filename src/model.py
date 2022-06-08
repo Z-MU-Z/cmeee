@@ -1,4 +1,3 @@
-
 from audioop import bias
 from typing import Optional
 from unicodedata import bidirectional
@@ -43,7 +42,7 @@ class LinearClassifier(nn.Module):
         loss, pred_labels = None, None
 
         if labels is None:
-            pred_labels = self._pred_labels(_logits)    
+            pred_labels = self._pred_labels(_logits)
         else:
             loss = self.loss_fct(_logits.view(-1, self.num_labels), labels.view(-1))
             if not no_decode:
@@ -79,7 +78,7 @@ class CRFClassifier(nn.Module):
         return tensor_result.long()
         # return pred_labels
 
-    def forward(self, hidden_states, attention_mask, labels=None, no_decode=False, label_pad_token_id=NER_PAD_ID):    
+    def forward(self, hidden_states, attention_mask, labels=None, no_decode=False, label_pad_token_id=NER_PAD_ID):
         '''NOTE: This is where to modify for CRF.
         You need to finish the code to compute loss and predict labels.
         '''
@@ -122,7 +121,7 @@ class BertForLinearHeadNER(BertPreTrainedModel):
         self.bert = BertModel(config)
 
         self.classifier = LinearClassifier(config.hidden_size, num_labels1, config.hidden_dropout_prob)
-        
+
         self.init_weights()
 
     def forward(
@@ -216,7 +215,7 @@ class BertForCRFHeadNER(BertPreTrainedModel):
 
         self.bert = BertModel(config)
         self.classifier = CRFClassifier(config.hidden_size, num_labels1, config.hidden_dropout_prob)
-        
+
         self.init_weights()
 
     def forward(
@@ -247,8 +246,9 @@ class BertForCRFHeadNER(BertPreTrainedModel):
         )[0]
 
         output = self.classifier.forward(sequence_output, attention_mask, labels, no_decode=no_decode)
-        
+
         return output
+
 
 class BertForCRFHeadNestedNER(BertPreTrainedModel):
     config_class = BertConfig
@@ -297,4 +297,95 @@ class BertForCRFHeadNestedNER(BertPreTrainedModel):
         '''
         output = self.classifier1.forward(sequence_output, attention_mask, labels, no_decode=no_decode)
         output2 = self.classifier2.forward(sequence_output, attention_mask, labels2, no_decode=no_decode)
+        return _group_ner_outputs(output, output2)
+
+
+class BertForCRFHeadNestedNERWordChar(BertPreTrainedModel):
+    config_class = BertConfig
+    base_model_prefix = "bert"
+
+    def __init__(self, config_char: BertConfig, config_word: BertConfig, num_labels1: int, num_labels2: int):
+        super().__init__(config_char)
+        self.char_config = config_char
+        self.word_config = config_word
+
+        self.char_bert = BertModel(config_char)
+        self.word_bert = BertModel(config_word)
+        '''NOTE: This is where to modify for Nested NER.
+        '''
+        self.classifier1 = CRFClassifier(config_char.hidden_size + config_word.hidden_size, num_labels1,
+                                         config_char.hidden_dropout_prob)
+        self.classifier2 = CRFClassifier(config_char.hidden_size + config_word.hidden_size, num_labels2,
+                                         config_char.hidden_dropout_prob)
+        self.init_weights()
+
+    def wl2cl(self, wl_embs, word_lens, word_mask, L_char):
+        """
+        :param wl_embs: B, L_word, 768
+        :param word_lens: B, L_word
+        :param word_mask: B, L_word, 1 denotes meaningful value
+        :param L_char: max chars num
+        :return: B, L_char, 768
+        """
+        # attn_mat should be an L_word x L_char matrix
+        attn_mat = torch.zeros(size=(word_lens.shape[0], word_lens.shape[1], L_char)).float()
+        attn_mat = attn_mat.to(wl_embs.device)
+        for b in range(word_lens.shape[0]):
+            start = 0
+            for i, L in enumerate(word_lens[b]):
+                attn_mat[b, i, start:start + L] = 1
+                start += L
+        return torch.bmm(wl_embs.permute(0, 2, 1), attn_mat).permute(0, 2, 1)
+
+    def forward(
+            self,
+            char_input_ids=None,
+            word_input_ids=None,
+            word_lens=None,
+            char_attention_mask=None,
+            word_attention_mask=None,
+            token_type_ids=None,
+            position_ids=None,
+            head_mask=None,
+            inputs_embeds=None,
+            labels=None,
+            labels2=None,
+            output_attentions=None,
+            output_hidden_states=None,
+            return_dict=None,
+            no_decode=False,
+    ):
+        char_sequence_output = self.char_bert(  # NOTE: B, char_max_len, 768
+            char_input_ids,
+            attention_mask=char_attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )[0]
+        word_sequence_output = self.word_bert(  # NOTE: B, word_max_len, 768
+            word_input_ids,
+            attention_mask=word_attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )[0]
+        extended_word_sequence_output = self.wl2cl(word_sequence_output, word_lens, word_mask=word_attention_mask,
+                                                   L_char=char_sequence_output.shape[1])
+
+        combined_output = torch.cat([
+            char_sequence_output,
+            extended_word_sequence_output
+        ], dim=-1)
+        # TODO: duplicate word to char-level
+
+        output = self.classifier1.forward(combined_output, char_attention_mask, labels, no_decode=no_decode)
+        output2 = self.classifier2.forward(combined_output, char_attention_mask, labels2, no_decode=no_decode)
         return _group_ner_outputs(output, output2)

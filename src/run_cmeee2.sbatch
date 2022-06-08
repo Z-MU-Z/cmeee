@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=run_cmeee
-#SBATCH --partition=dgx2
+#SBATCH --partition=2080ti,gpu
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH --ntasks-per-node=1
@@ -13,6 +13,10 @@ CBLUE_ROOT=../data/CBLUEDatasets
   
 MODEL_TYPE=bert
 MODEL_PATH=../bert-base-chinese
+WORD_MODEL_PATH=../roberta-base-word-chinese-cluecorpussmall
+USE_WORD=""
+
+
 SEED=2022
 LABEL_NAMES=(labels)
 TASK_ID=3
@@ -38,7 +42,17 @@ case ${TASK_ID} in
   ;;
 esac
 
-OUTPUT_DIR=../ckpts/${MODEL_TYPE}_${HEAD_TYPE}_${SEED}
+# ========= parse use_word ==========
+if [ -z $USE_WORD ]; then
+    use_word=False
+    OUTPUT_DIR=../ckpts/${MODEL_TYPE}_${HEAD_TYPE}_${SEED}  # NOTE: changed dir name
+else
+    use_word=True
+    OUTPUT_DIR=../ckpts/${MODEL_TYPE}_${HEAD_TYPE}_${SEED}_wordchar  # NOTE: changed dir name
+fi
+# ===================================
+
+OUTPUT_DIR=../ckpts/${MODEL_TYPE}_${HEAD_TYPE}_${SEED}_wordchar  # NOTE: changed dir name
 
 PYTHONPATH=../.. \
 python run_cmeee.py \
@@ -83,7 +97,9 @@ python run_cmeee.py \
   --greater_is_better           true \
   \
   --model_type                  ${MODEL_TYPE} \
+  --use_word                    ${use_word} \
   --model_path                  ${MODEL_PATH} \
+  --word_model_path             ${WORD_MODEL_PATH} \
   --head_type                   ${HEAD_TYPE} \
   \
   --cblue_root                  ${CBLUE_ROOT} \

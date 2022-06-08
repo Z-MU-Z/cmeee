@@ -12,9 +12,6 @@ import sys
 
 
 def f1_from_jsons(gt_label_json, pred_label_json, nested=True):
-    # gt_label_json = '../data/CBLUEDatasets/CMeEE/CMeEE_dev.json'
-    # pred_label_json = '../ckpts/bert_crf_nested_2022/CMeEE_test.json'
-    # nested = True
 
     gt_label_dict = json.load(open(gt_label_json))
     pred_label_dict = json.load(open(pred_label_json))
@@ -73,7 +70,6 @@ def f1_from_jsons(gt_label_json, pred_label_json, nested=True):
         metrics = ComputeMetricsForNestedNER()(EvalPrediction(pred_array, (label_array[:, :, 0], label_array[:, :, 1])))
     else:
         metrics = ComputeMetricsForNER()(EvalPrediction(pred_array, label_array))
-    # print(metrics['f1'])
     return metrics['f1']
 
 
@@ -124,8 +120,6 @@ def create_html(gt_label_json, pred_label_json, file_path='../result.html', samp
                 pred_line = "&#9;".join(pred_list) + '\n'
                 f.write(label_line)
                 f.write(pred_line)
-                # f.write('\n')
-                # f.write("="*500 + '\n')
                 f.write("<HR>\n")
         else:
             f.write("<!DOCTYPE html>\n"
@@ -212,13 +206,15 @@ def create_html(gt_label_json, pred_label_json, file_path='../result.html', samp
 
 
 if __name__ == '__main__':
-    f1 = f1_from_jsons('../data/CBLUEDatasets/CMeEE/CMeEE_dev.json',
-                       '../ckpts/bert_crf_nested_2022/CMeEE_test.json',
+    gt_json = '../data/CBLUEDatasets/CMeEE/CMeEE_dev.json'
+    pred_json = '../ckpts/bert_crf_nested_2022_wordchar/CMeEE_test.json'
+    f1 = f1_from_jsons(gt_label_json=gt_json,
+                       pred_label_json=pred_json,
                        nested=True)
     print(f"F1 = {f1}")
 
-    create_html('../data/CBLUEDatasets/CMeEE/CMeEE_dev.json',
-                '../ckpts/bert_crf_nested_2022/CMeEE_test.json',
+    create_html(gt_label_json=gt_json,
+                pred_label_json=pred_json,
                 file_path='result.html',
                 sample_num=100,
                 nested=True)
