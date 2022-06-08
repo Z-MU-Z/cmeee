@@ -6,13 +6,14 @@ from metrics import ComputeMetricsForNestedNER, ComputeMetricsForNER, EvalPredic
 import json
 import numpy as np
 import random
+from tqdm import tqdm
 import time
 import datetime
 import sys
+import pandas as pd
 
 
 def f1_from_jsons(gt_label_json, pred_label_json, nested=True):
-
     gt_label_dict = json.load(open(gt_label_json))
     pred_label_dict = json.load(open(pred_label_json))
 
@@ -73,6 +74,42 @@ def f1_from_jsons(gt_label_json, pred_label_json, nested=True):
     return metrics['f1']
 
 
+def get_type_wise_metric(gt_json, pred_json, nested=True):
+    # return : dataframe
+    gt_json = json.load(open(gt_json))
+    pred_json = json.load(open(pred_json))
+    gt_label_sets = []
+    for item in gt_json:
+        for ent in item['entities']:
+            gt_label_sets.append(ent)
+    pred_sets = []
+    for item in pred_json:
+        for ent in item['entities']:
+            if "entity" not in ent.keys():
+                ent['entity'] = item['text'][ent['start_idx']:ent['end_idx'] + 1]
+            pred_sets.append(ent)
+
+    res = []
+    for type in tqdm(LABEL):
+        this_type_gt = list(filter(lambda x: x['type'] == type, gt_label_sets))
+        this_type_pred = list(filter(lambda x: x['type'] == type, pred_sets))
+        this_type_correct = sum(map(lambda x: x in this_type_gt, this_type_pred))
+        eps = 1e-7
+
+        recall = this_type_correct /(len(this_type_gt)+eps)
+        precision = this_type_correct / (len(this_type_pred)+eps)
+        f1 = 2 * recall * precision / (recall + precision + eps)
+        res.append({
+            "type": type,
+            "recall": recall,
+            "precision": precision,
+            "f1": f1,
+            "gt_count": len(this_type_gt),
+            "pred_count": len(this_type_pred)
+        })
+    return pd.DataFrame(res)
+
+
 def create_html(gt_label_json, pred_label_json, file_path='../result.html', sample_num=1000, nested=True):
     gt_label_dict = json.load(open(gt_label_json))
     pred_label_dict = json.load(open(pred_label_json))
@@ -88,7 +125,7 @@ def create_html(gt_label_json, pred_label_json, file_path='../result.html', samp
                     "</head>\n"
                     "<body>\n"
                     "<h1>CMeEE prediction</h1>\n"
-                    f"Created on {datetime.datetime.now()}\n<br>\nlabel file: <code>{gt_label_json}</code>\n<br>\nprediction file: <code>{pred_label_json}</code>\n<br>\nNested: <code>True</code>\n"
+                    f"Created on {datetime.datetime.now()}\n<br>\nlabel file: <code>{gt_label_json}</code>\n<br>\nprediction file: <code>{pred_label_json}</code>\n<br>\nNested: <code>False</code>\n"
                     "<h3>Format: Text, Label, Prediction</h3>\n"
                     "<pre>\n")
             for idx, (label_term, pred_term) in itr:
@@ -98,11 +135,15 @@ def create_html(gt_label_json, pred_label_json, file_path='../result.html', samp
                 pred_list = ["O" for _ in range(len(label_term['text']))]
                 for i, ent in enumerate(label_term['entities']):
                     label_list[ent['start_idx']] = f"B-{ent['type']}"
-                    label_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (ent['end_idx'] -ent['start_idx'])
+                    label_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (
+                            ent['end_idx'] - ent['start_idx'])
                 for i, ent in enumerate(pred_term['entities']):
                     pred_list[ent['start_idx']] = f"B-{ent['type']}"
-                    pred_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (ent['end_idx'] -ent['start_idx'])
+                    pred_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (
+                            ent['end_idx'] - ent['start_idx'])
                 for ent in pred_term['entities']:
+                    if "entity" not in ent.keys():
+                        ent['entity'] = pred_term['text'][ent['start_idx']:ent['end_idx'] + 1]
                     if ent in label_term['entities']:
                         label_list[ent['start_idx']] = "<span style=\"color: green\">" + label_list[ent['start_idx']]
                         label_list[ent['end_idx']] = label_list[ent['end_idx']] + "</span>"
@@ -144,34 +185,42 @@ def create_html(gt_label_json, pred_label_json, file_path='../result.html', samp
                 for i, ent in enumerate(label_term['entities']):
                     if not ent['type'] in LABEL2:
                         label1_list[ent['start_idx']] = f"B-{ent['type']}"
-                        label1_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (ent['end_idx'] -ent['start_idx'])
+                        label1_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (
+                                ent['end_idx'] - ent['start_idx'])
                     else:
                         label2_list[ent['start_idx']] = f"B-{ent['type']}"
-                        label2_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (ent['end_idx'] -ent['start_idx'])
+                        label2_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (
+                                ent['end_idx'] - ent['start_idx'])
 
                 for i, ent in enumerate(pred_term['entities']):
                     if not ent['type'] in LABEL2:
                         pred1_list[ent['start_idx']] = f"B-{ent['type']}"
-                        pred1_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (ent['end_idx'] -ent['start_idx'])
+                        pred1_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (
+                                ent['end_idx'] - ent['start_idx'])
                     else:
                         pred2_list[ent['start_idx']] = f"B-{ent['type']}"
-                        pred2_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (ent['end_idx'] -ent['start_idx'])
+                        pred2_list[ent['start_idx'] + 1: ent['end_idx'] + 1] = [f"I-{ent['type']}"] * (
+                                ent['end_idx'] - ent['start_idx'])
 
                 for ent in pred_term['entities']:
                     if not ent['type'] in LABEL2:  # pred 中不是LABEL2的那些实体
                         if ent in label_term['entities']:
-                            label1_list[ent['start_idx']] = "<span style=\"color: green\">" + label1_list[ent['start_idx']]
+                            label1_list[ent['start_idx']] = "<span style=\"color: green\">" + label1_list[
+                                ent['start_idx']]
                             label1_list[ent['end_idx']] = label1_list[ent['end_idx']] + "</span>"
-                            pred1_list[ent['start_idx']] = "<span style=\"color: green\">" + pred1_list[ent['start_idx']]
+                            pred1_list[ent['start_idx']] = "<span style=\"color: green\">" + pred1_list[
+                                ent['start_idx']]
                             pred1_list[ent['end_idx']] = pred1_list[ent['end_idx']] + "</span>"
                         else:
                             pred1_list[ent['start_idx']] = "<span style=\"color: red\">" + pred1_list[ent['start_idx']]
                             pred1_list[ent['end_idx']] = pred1_list[ent['end_idx']] + "</span>"
                     else:
                         if ent in label_term['entities']:
-                            label2_list[ent['start_idx']] = "<span style=\"color: green\">" + label2_list[ent['start_idx']]
+                            label2_list[ent['start_idx']] = "<span style=\"color: green\">" + label2_list[
+                                ent['start_idx']]
                             label2_list[ent['end_idx']] = label2_list[ent['end_idx']] + "</span>"
-                            pred2_list[ent['start_idx']] = "<span style=\"color: green\">" + pred2_list[ent['start_idx']]
+                            pred2_list[ent['start_idx']] = "<span style=\"color: green\">" + pred2_list[
+                                ent['start_idx']]
                             pred2_list[ent['end_idx']] = pred2_list[ent['end_idx']] + "</span>"
                         else:
                             pred2_list[ent['start_idx']] = "<span style=\"color: red\">" + pred2_list[ent['start_idx']]
@@ -180,11 +229,13 @@ def create_html(gt_label_json, pred_label_json, file_path='../result.html', samp
                 for ent in label_term['entities']:
                     if not ent['type'] in LABEL2:  # pred 中不是LABEL2的那些实体
                         if ent not in pred_term['entities']:
-                            label1_list[ent['start_idx']] = "<span style=\"color: red\">" + label1_list[ent['start_idx']]
+                            label1_list[ent['start_idx']] = "<span style=\"color: red\">" + label1_list[
+                                ent['start_idx']]
                             label1_list[ent['end_idx']] = label1_list[ent['end_idx']] + "</span>"
                     else:
                         if ent not in pred_term['entities']:
-                            label2_list[ent['start_idx']] = "<span style=\"color: red\">" + label2_list[ent['start_idx']]
+                            label2_list[ent['start_idx']] = "<span style=\"color: red\">" + label2_list[
+                                ent['start_idx']]
                             label2_list[ent['end_idx']] = label2_list[ent['end_idx']] + "</span>"
 
                 label1_line = "&#9;".join(label1_list) + '\n'
@@ -207,14 +258,22 @@ def create_html(gt_label_json, pred_label_json, file_path='../result.html', samp
 
 if __name__ == '__main__':
     gt_json = '../data/CBLUEDatasets/CMeEE/CMeEE_dev.json'
-    pred_json = '../ckpts/bert_crf_nested_2022_wordchar/CMeEE_test.json'
+    # pred_json = '../ckpts/baseline_crf_nested/CMeEE_dev_updated_by_rule.json'
+    pred_json = '../ckpts/baseline_crf_nested/CMeEE_dev.json'
+
+    # pred_json = '../ckpts/global_pointer/CMeEE_dev.json'
+    # pred_json = '../rule_for_dep_dev.json'
+
     f1 = f1_from_jsons(gt_label_json=gt_json,
                        pred_label_json=pred_json,
-                       nested=True)
+                       nested=False)
     print(f"F1 = {f1}")
 
     create_html(gt_label_json=gt_json,
                 pred_label_json=pred_json,
                 file_path='result.html',
                 sample_num=100,
-                nested=True)
+                nested=False)
+
+    type_wise_metric = get_type_wise_metric(gt_json, pred_json)
+    print(type_wise_metric)

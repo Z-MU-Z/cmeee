@@ -64,7 +64,7 @@ def get_model_with_tokenizer(model_args):
     return model, tokenizer
 
 
-def generate_testing_results(train_args, logger, predictions, test_dataset, for_nested_ner=False, use_word=False):
+def generate_testing_results(train_args, logger, predictions, test_dataset, for_nested_ner=False, use_word=False, which_set='test'):
     if use_word:
         test_dataset = test_dataset.char_dataset
     assert len(predictions) == len(test_dataset.examples), \
@@ -95,9 +95,9 @@ def generate_testing_results(train_args, logger, predictions, test_dataset, for_
             })
         final_answer.append({"text": text, "entities": entities})
 
-    with open(join(train_args.output_dir, "CMeEE_test.json"), "w", encoding="utf8") as f:
+    with open(join(train_args.output_dir, f"CMeEE_{which_set}.json"), "w", encoding="utf8") as f:
         json.dump(final_answer, f, indent=2, ensure_ascii=False)
-        logger.info(f"`CMeEE_test.json` saved")
+        logger.info(f"`CMeEE_{which_set}.json` saved")
 
 
 def check_word_level_integrity(dataset, word_dataset):
@@ -199,7 +199,7 @@ def main(_args: List[str] = None):
 
     if train_args.do_train:
         try:
-            trainer.train(resume_from_checkpoint=True)  # resume_from_checkpoint=True
+            trainer.train(resume_from_checkpoint=model_args.resumed_training)  # resume_from_checkpoint=True
         except KeyboardInterrupt:
             logger.info("Keyboard interrupt")
 
@@ -236,7 +236,7 @@ def main(_args: List[str] = None):
             del state_dict
         # =====================================================================================================
 
-        set_to_do_predict = "test"
+        set_to_do_predict = "dev"
         test_dataset = EEDataset(data_args.cblue_root, set_to_do_predict, data_args.max_length, tokenizer,
                                  for_nested_ner=for_nested_ner)
         if model_args.use_word:
