@@ -183,7 +183,7 @@ def main(_args: List[str] = None):
             for_nested_ner=for_nested_ner
         )
     else:
-        data_collator = CollateFnForEE(tokenizer.pad_token_id, for_nested_ner=for_nested_ner),
+        data_collator = CollateFnForEE(tokenizer.pad_token_id, for_nested_ner=for_nested_ner)
     # ===== Trainer =====
     compute_metrics = ComputeMetricsForNestedNER() if for_nested_ner else ComputeMetricsForNER()
 
