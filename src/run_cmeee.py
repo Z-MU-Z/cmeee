@@ -100,6 +100,8 @@ def generate_testing_results(train_args, logger, predictions, test_dataset, for_
     with open(join(train_args.output_dir, f"CMeEE_{which_set}.json"), "w", encoding="utf8") as f:
         json.dump(final_answer, f, indent=2, ensure_ascii=False)
         logger.info(f"`CMeEE_{which_set}.json` saved")
+        filename = join(train_args.output_dir, f'CMeEE_{which_set}.json')
+        print(f"Writing result to {filename}")
 
 
 def check_word_level_integrity(dataset, word_dataset):
@@ -251,7 +253,7 @@ def main(_args: List[str] = None):
             del state_dict
         # =====================================================================================================
 
-        set_to_do_predict = "test"
+        set_to_do_predict = "dev"
         test_dataset = EEDataset(data_args.cblue_root, set_to_do_predict, data_args.max_length, tokenizer,
                                  for_nested_ner=for_nested_ner)
         if model_args.use_word:
@@ -264,7 +266,7 @@ def main(_args: List[str] = None):
         # np.ndarray, None, None
         predictions, _labels, _metrics = trainer.predict(test_dataset, metric_key_prefix="predict")
         generate_testing_results(train_args, logger, predictions, test_dataset, for_nested_ner=for_nested_ner,
-                                 use_word=model_args.use_word)
+                                 use_word=model_args.use_word, which_set=set_to_do_predict)
 
 
 if __name__ == '__main__':
