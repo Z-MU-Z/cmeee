@@ -14,7 +14,8 @@ from logger import get_logger
 from ee_data import EE_label2id2, EEDataset, EE_NUM_LABELS1, EE_NUM_LABELS2, EE_NUM_LABELS, CollateFnForEE, \
     EE_label2id1, NER_PAD, EE_label2id, EEWordDataset, EEDatasetWordChar, CollateFnForEEWordChar
 from model import BertForCRFHeadNER, BertForLinearHeadNER, BertForLinearHeadNestedNER, CRFClassifier, LinearClassifier, \
-    BertForCRFHeadNestedNER, BertForCRFHeadNestedNERWordChar, BertForCRFHeadNestedNERWordCharAdd
+    BertForCRFHeadNestedNER, BertForCRFHeadNestedNERWordChar, BertForCRFHeadNestedNERWordCharAdd, \
+    BertForCRFHeadNestedNERFlat
 from metrics import ComputeMetricsForNER, ComputeMetricsForNestedNER, extract_entities
 from torch.nn import LSTM
 import sys
@@ -147,11 +148,17 @@ def main(_args: List[str] = None):
                                                                        config_word=word_bert_config,
                                                                        num_labels1=EE_NUM_LABELS1,
                                                                        num_labels2=EE_NUM_LABELS2)
-        else:
+        elif model_args.use_flat:
+            model = BertForCRFHeadNestedNERFlat.from_pretrained(model_args.model_path,
+                                                                config_word=word_bert_config,
+                                                                num_labels1=EE_NUM_LABELS1,
+                                                                num_labels2=EE_NUM_LABELS2)
+        else:  # word concat with char
             model = BertForCRFHeadNestedNERWordChar.from_pretrained(model_args.model_path,
                                                                     config_word=word_bert_config,
                                                                     num_labels1=EE_NUM_LABELS1,
                                                                     num_labels2=EE_NUM_LABELS2)
+    # logger.info(model)
     for_nested_ner = 'nested' in model_args.head_type
 
     # ===== Get datasets =====
@@ -238,12 +245,13 @@ def main(_args: List[str] = None):
             state_dict = torch.load(os.path.join(resume_from_checkpoint, WEIGHTS_NAME), map_location="cpu")
             # If the model is on the GPU, it still works!
             trainer._load_state_dict_in_model(state_dict)
+            logger.info(f"trainer best model path {trainer.state.best_model_checkpoint}")
 
             # release memory
             del state_dict
         # =====================================================================================================
 
-        set_to_do_predict = "dev"
+        set_to_do_predict = "test"
         test_dataset = EEDataset(data_args.cblue_root, set_to_do_predict, data_args.max_length, tokenizer,
                                  for_nested_ner=for_nested_ner)
         if model_args.use_word:

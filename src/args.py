@@ -21,6 +21,7 @@ class ModelConstructArgs(_Args):
     use_word: bool = field(metadata={"help": "whether to use word concatenated with char"})
     resumed_training: bool = field(metadata={'help': "whether to resume from existing checkpoint"})
     use_word_add: bool = field(default=False, metadata={"help": "whether to use word added with char"})
+    use_flat: bool = field(default=False, metadata={"help": "whether to use flat lattice model"})
     model_path: Optional[str] = field(default=None, metadata={"help": "Pretrained model path"})
     word_model_path: Optional[str] = field(default=None, metadata={'help': "Pretrained word-level model path"})
     init_model: Optional[int] = field(default=0, metadata={"choices": [0, 1], "help": "Init models' parameters"})
