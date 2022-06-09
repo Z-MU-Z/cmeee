@@ -6,11 +6,15 @@ from collections import Counter
 from itertools import repeat
 from os.path import join, exists
 from typing import List
-
+from tqdm import tqdm
 import numpy as np
 import torch
 from torch.utils.data import Dataset
-
+from BackTranslation import BackTranslation, BackTranslation_Baidu
+trans = BackTranslation_Baidu(appid='20220607001240909', secretKey='OcuqIUjBpSMfw1w0SCOF')
+def translate(text):
+    result = trans.translate(text, src='zh', tmp='en')
+    return result.result_text
 logger = logging.getLogger(__name__)
 
 NER_PAD, NO_ENT = '[PAD]', 'O'
@@ -141,8 +145,8 @@ class InputExample:
                 tem_text += self.text[start:end+1]
 
             else:
-                #result = translate(self.text[start:end+1])
-                result = '只是为了测试'
+                result = translate(self.text[start:end+1])
+                #result = '只是为了测试'
                 bias += len(result) - (end + 1 - start)
                 tem_text += result
         while entity_index < len(self.entities):
@@ -181,7 +185,10 @@ class EEDataloader:
     def get_data(self, mode: str):
         if mode not in ("train", "dev", "test"):
             raise ValueError(f"Unrecognized mode: {mode}")
+        if mode == 'train':
+            return self._parse(self._load_json(join(self.data_root, f"CMeEE_{mode}_100.json")))
         return self._parse(self._load_json(join(self.data_root, f"CMeEE_{mode}.json")))
+        #return self._parse(self._load_json("../data/test.json"))
 
 
 class EEDataset(Dataset):
@@ -207,12 +214,13 @@ class EEDataset(Dataset):
             self.examples = EEDataloader(cblue_root).get_data(mode)  # get original data
             # print(self.examples[0].text)
             # print(self.examples[0].entities)
-            json_list = []
-            for i in range(len(self.examples)):
-                self.examples[i].back_translation(5)
-                json_list.append(self.examples[i].to_dict())
-                with open('../data/test.json', encoding='utf-8', mode='w') as f1:
-                    json.dump(json_list, f1, indent=4, ensure_ascii=False)
+            # json_list = []
+            # if mode =="train":
+            #     for i in tqdm(range(len(self.examples))):
+            #         self.examples[i].back_translation(5)
+            #         json_list.append(self.examples[i].to_dict())
+            #         with open('../data/train.json', encoding='utf-8', mode='w') as f1:
+            #             json.dump(json_list, f1, indent=4, ensure_ascii=False)
             self.data = self._preprocess(self.examples, tokenizer)  # preprocess
             with open(cache_file, 'wb') as f:
                 pickle.dump((self.examples, self.data), f)

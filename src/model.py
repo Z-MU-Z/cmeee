@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from torch import nn
 from torch.nn import CrossEntropyLoss
 from torchcrf import CRF
-from transformers import BertPreTrainedModel, BertConfig, BertModel
+from transformers import BertPreTrainedModel, BertConfig, BertModel,BertAdapterModel
 from transformers.file_utils import ModelOutput
 
 from ee_data import EE_label2id1, NER_PAD
@@ -155,6 +155,96 @@ class BertForLinearHeadNER(BertPreTrainedModel):
         output = self.classifier.forward(sequence_output, labels, no_decode=no_decode)
         return output
 
+
+class BertlayerForLinearHeadNER(BertPreTrainedModel):
+    config_class = BertConfig
+    base_model_prefix = "bert"
+
+    def __init__(self, config: BertConfig, num_labels1: int,layer = -1):
+        super().__init__(config)
+        self.config = config
+        config.output_hidden_states = True
+        self.bert = BertModel(config)
+        self.layer = layer
+        self.classifier = LinearClassifier(config.hidden_size, num_labels1, config.hidden_dropout_prob)
+
+        self.init_weights()
+
+    def forward(
+            self,
+            input_ids=None,
+            attention_mask=None,
+            token_type_ids=None,
+            position_ids=None,
+            head_mask=None,
+            inputs_embeds=None,
+            labels=None,
+            labels2=None,
+            output_attentions=None,
+            output_hidden_states=None,
+            return_dict=None,
+            no_decode=False,
+    ):
+        sequence_output = self.bert(
+            input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )[2][self.layer]
+
+        output = self.classifier.forward(sequence_output, labels, no_decode=no_decode)
+        return output
+
+class BertAdapterForLinearHeadNER(BertPreTrainedModel):
+    config_class = BertConfig
+    base_model_prefix = "bert"
+
+    def __init__(self, config: BertConfig, num_labels1: int):
+        super().__init__(config)
+        self.config = config
+
+        self.bert = BertAdapterModel(config)
+        # bert.add_adapter("ner1")
+        # bert.train_adapter("ner1")
+
+        self.classifier = LinearClassifier(config.hidden_size, num_labels1, config.hidden_dropout_prob)
+
+        self.init_weights()
+
+    def forward(
+            self,
+            input_ids=None,
+            attention_mask=None,
+            token_type_ids=None,
+            position_ids=None,
+            head_mask=None,
+            inputs_embeds=None,
+            labels=None,
+            labels2=None,
+            output_attentions=None,
+            output_hidden_states=None,
+            return_dict=None,
+            no_decode=False,
+    ):
+        sequence_output = self.bert(
+            input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )[0]
+        #print(sequence_output)
+        output = self.classifier.forward(sequence_output, labels, no_decode=no_decode)
+        return output
 
 class BertForLinearHeadNestedNER(BertPreTrainedModel):
     config_class = BertConfig

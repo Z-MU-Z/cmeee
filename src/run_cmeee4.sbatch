@@ -11,11 +11,13 @@
 
 CBLUE_ROOT=../data/CBLUEDatasets
   
-MODEL_TYPE=roberta_large
-MODEL_PATH=clue/roberta_chinese_large
+#MODEL_TYPE=roberta_large
+#MODEL_PATH=clue/roberta_chinese_large
+MODEL_TYPE=bert_10
+MODEL_PATH=../bert-base-chinese
 SEED=2022
 LABEL_NAMES=(labels)
-TASK_ID=3
+TASK_ID=5
 
 case ${TASK_ID} in
 0)
@@ -31,6 +33,12 @@ case ${TASK_ID} in
 3)
   HEAD_TYPE=crf_nested
   LABEL_NAMES=(labels labels2)
+  ;;
+4)
+  HEAD_TYPE=adapter_linear
+  ;;
+5)
+  HEAD_TYPE=layer_linear
   ;;
 *)
   echo "Error ${TASK_ID}"

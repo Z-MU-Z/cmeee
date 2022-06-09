@@ -6,7 +6,7 @@ from typing import List
 
 from sklearn.metrics import precision_recall_fscore_support
 from transformers.models.bert.modeling_bert import BertEmbeddings, BertAttention
-from transformers import set_seed, BertTokenizer, Trainer, HfArgumentParser, TrainingArguments, BertLayer
+from transformers import set_seed, BertTokenizer, Trainer, HfArgumentParser, TrainingArguments, BertLayer,AdapterTrainer
 
 from args import ModelConstructArgs, CBLUEDataArgs
 from logger import get_logger
@@ -23,6 +23,8 @@ MODEL_CLASS = {
     'linear_nested': BertForLinearHeadNestedNER,
     'crf': BertForCRFHeadNER,
     'crf_nested':BertForCRFHeadNestedNER,
+    'adapter_linear':BertAdapterForLinearHeadNER,
+    'layer_linear':BertlayerForLinearHeadNER
 }
 n_tokens = 20
 initialize_from_vocab = True
@@ -50,6 +52,8 @@ def get_model_with_tokenizer(model_args):
 
     if 'nested' not in model_args.head_type:
         model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS)
+        if "layer" in model_args.head_type:
+            model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS,layer=10)
     else:
         #model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS1, num_labels2=EE_NUM_LABELS2)
         #model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS1,num_labels2=EE_NUM_LABELS2,cache_dir = '/dssg/home/acct-stu/stu915/.cache/huggingface/transformers',local_files_only = True)
@@ -108,6 +112,7 @@ def main(_args: List[str] = None):
     model, tokenizer = get_model_with_tokenizer(model_args)
     for_nested_ner = 'nested' in model_args.head_type
     if model_args.prompt_tuning:
+        print("use_prompt_tuning")
         s_wte = SoftEmbedding(model.get_input_embeddings(),
                               n_tokens=n_tokens,
                               initialize_from_vocab=initialize_from_vocab)
@@ -115,6 +120,8 @@ def main(_args: List[str] = None):
         for param in model.bert.encoder.parameters():
             param.requires_grad = False
         #print(s_wte.learned_embedding)
+
+
     # ===== Get datasets =====
     if train_args.do_train:
         train_dataset = EEDataset(data_args.cblue_root, "train", data_args.max_length, tokenizer, for_nested_ner=for_nested_ner)
@@ -126,8 +133,12 @@ def main(_args: List[str] = None):
 
     # ===== Trainer =====
     compute_metrics = ComputeMetricsForNestedNER() if for_nested_ner else ComputeMetricsForNER()
-    
-    trainer = Trainer(
+
+    if 'adapter' in model_args.head_type:
+        print("use_adapter")
+        model.bert.add_adapter("ner1")
+        model.bert.train_adapter("ner1")
+        trainer = Trainer(
         model=model,
         tokenizer=tokenizer,
         args=train_args,
@@ -136,6 +147,16 @@ def main(_args: List[str] = None):
         eval_dataset=dev_dataset,
         compute_metrics=compute_metrics,
     )
+    else:
+        trainer = Trainer(
+            model=model,
+            tokenizer=tokenizer,
+            args=train_args,
+            data_collator=CollateFnForEE(tokenizer.pad_token_id, for_nested_ner=for_nested_ner),
+            train_dataset=train_dataset,
+            eval_dataset=dev_dataset,
+            compute_metrics=compute_metrics,
+        )
 
     if train_args.do_train:
         try:
