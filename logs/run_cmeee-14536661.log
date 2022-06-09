@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/dssg/home/acct-stu/stu915/cmeee/src/run_cmeee.py", line 7, in <module>
-    from sklearn.metrics import precision_recall_fscore_support
-ModuleNotFoundError: No module named 'sklearn'
