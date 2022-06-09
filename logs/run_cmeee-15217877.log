@@ -1,0 +1,655 @@
+Some weights of the model checkpoint at ../bert-base-chinese were not used when initializing BertForLinearHeadNER: ['cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.transform.LayerNorm.bias', 'cls.seq_relationship.bias', 'cls.predictions.bias', 'cls.predictions.transform.dense.weight', 'cls.predictions.decoder.weight', 'cls.seq_relationship.weight']
+- This IS expected if you are initializing BertForLinearHeadNER from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForLinearHeadNER from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForLinearHeadNER were not initialized from the model checkpoint at ../bert-base-chinese and are newly initialized: ['classifier.layers.1.weight', 'classifier.layers.1.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/transformers/optimization.py:306: FutureWarning: This implementation of AdamW is deprecated and will be removed in a future version. Use the PyTorch implementation torch.optim.AdamW instead, or set `no_deprecation_warning=True` to disable this warning
+  warnings.warn(
+***** Running training *****
+  Num examples = 30000
+  Num Epochs = 20
+  Instantaneous batch size per device = 4
+  Total train batch size (w. parallel, distributed & accumulation) = 16
+  Gradient Accumulation steps = 4
+  Total optimization steps = 37500
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 3.1546, 'learning_rate': 1.6e-08, 'epoch': 0.0}
+{'loss': 1.8863, 'learning_rate': 3.2000000000000003e-06, 'epoch': 0.11}
+{'loss': 0.5133, 'learning_rate': 6.4000000000000006e-06, 'epoch': 0.21}
+{'loss': 0.3899, 'learning_rate': 9.600000000000001e-06, 'epoch': 0.32}
+{'loss': 0.3458, 'learning_rate': 1.2800000000000001e-05, 'epoch': 0.43}
+{'loss': 0.3124, 'learning_rate': 1.6e-05, 'epoch': 0.53}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-1000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-1000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-1000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-1000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-1000/special_tokens_map.json
+{'eval_loss': 0.22902271151542664, 'eval_f1': 0.5443126308443824, 'eval_runtime': 7.9701, 'eval_samples_per_second': 627.345, 'eval_steps_per_second': 39.272, 'epoch': 0.53}
+{'loss': 0.3088, 'learning_rate': 1.9200000000000003e-05, 'epoch': 0.64}
+{'loss': 0.3051, 'learning_rate': 2.2400000000000002e-05, 'epoch': 0.75}
+{'loss': 0.287, 'learning_rate': 2.5600000000000002e-05, 'epoch': 0.85}
+{'loss': 0.2882, 'learning_rate': 2.88e-05, 'epoch': 0.96}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.2532, 'learning_rate': 2.9999088688415145e-05, 'epoch': 1.07}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-2000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-2000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-2000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-2000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-2000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-37000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.21308550238609314, 'eval_f1': 0.5966786545377618, 'eval_runtime': 7.9269, 'eval_samples_per_second': 630.764, 'eval_steps_per_second': 39.486, 'epoch': 1.07}
+{'loss': 0.2437, 'learning_rate': 2.9993839892985038e-05, 'epoch': 1.17}
+{'loss': 0.2417, 'learning_rate': 2.9983927172082925e-05, 'epoch': 1.28}
+{'loss': 0.242, 'learning_rate': 2.996935360912118e-05, 'epoch': 1.39}
+{'loss': 0.2262, 'learning_rate': 2.995012373729557e-05, 'epoch': 1.49}
+{'loss': 0.2246, 'learning_rate': 2.9926243538175172e-05, 'epoch': 1.6}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-3000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-3000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-3000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-3000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-3000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-2000] due to args.save_total_limit
+{'eval_loss': 0.21569442749023438, 'eval_f1': 0.5975684375748225, 'eval_runtime': 7.782, 'eval_samples_per_second': 642.509, 'eval_steps_per_second': 40.221, 'epoch': 1.6}
+{'loss': 0.2307, 'learning_rate': 2.9897720439841768e-05, 'epoch': 1.71}
+{'loss': 0.22, 'learning_rate': 2.98645633145793e-05, 'epoch': 1.81}
+{'loss': 0.2128, 'learning_rate': 2.9826782476114073e-05, 'epoch': 1.92}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.1979, 'learning_rate': 2.9784389676406646e-05, 'epoch': 2.03}
+{'loss': 0.1596, 'learning_rate': 2.973739810199627e-05, 'epoch': 2.13}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-4000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-4000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-4000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-4000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-4000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-3000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.2415861338376999, 'eval_f1': 0.620444766989788, 'eval_runtime': 7.9813, 'eval_samples_per_second': 626.465, 'eval_steps_per_second': 39.217, 'epoch': 2.13}
+{'loss': 0.1678, 'learning_rate': 2.968582236989917e-05, 'epoch': 2.24}
+{'loss': 0.155, 'learning_rate': 2.9629678523061803e-05, 'epoch': 2.35}
+{'loss': 0.1595, 'learning_rate': 2.9568984025370616e-05, 'epoch': 2.45}
+{'loss': 0.1515, 'learning_rate': 2.9503757756219807e-05, 'epoch': 2.56}
+{'loss': 0.1582, 'learning_rate': 2.9434020004638757e-05, 'epoch': 2.67}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-5000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-5000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-5000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-5000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-5000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-4000] due to args.save_total_limit
+{'eval_loss': 0.24110688269138336, 'eval_f1': 0.5941889250814332, 'eval_runtime': 7.7994, 'eval_samples_per_second': 641.079, 'eval_steps_per_second': 40.132, 'epoch': 2.67}
+{'loss': 0.1539, 'learning_rate': 2.9359792462981007e-05, 'epoch': 2.77}
+{'loss': 0.1532, 'learning_rate': 2.9281098220176736e-05, 'epoch': 2.88}
+{'loss': 0.152, 'learning_rate': 2.9197961754550774e-05, 'epoch': 2.99}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.115, 'learning_rate': 2.9110408926208512e-05, 'epoch': 3.09}
+{'loss': 0.1144, 'learning_rate': 2.9018466968991913e-05, 'epoch': 3.2}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-6000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-6000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-6000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-6000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-6000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-5000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.2847610414028168, 'eval_f1': 0.600411136207903, 'eval_runtime': 7.7833, 'eval_samples_per_second': 642.404, 'eval_steps_per_second': 40.214, 'epoch': 3.2}
+{'loss': 0.1121, 'learning_rate': 2.8922164482008307e-05, 'epoch': 3.31}
+{'loss': 0.1125, 'learning_rate': 2.8821531420734418e-05, 'epoch': 3.41}
+{'loss': 0.1116, 'learning_rate': 2.8716599087698565e-05, 'epoch': 3.52}
+{'loss': 0.1051, 'learning_rate': 2.8607400122743805e-05, 'epoch': 3.63}
+{'loss': 0.1105, 'learning_rate': 2.8493968492875104e-05, 'epoch': 3.73}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-7000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-7000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-7000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-7000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-7000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-6000] due to args.save_total_limit
+{'eval_loss': 0.2847922444343567, 'eval_f1': 0.6054257882057191, 'eval_runtime': 7.9404, 'eval_samples_per_second': 629.693, 'eval_steps_per_second': 39.419, 'epoch': 3.73}
+{'loss': 0.1092, 'learning_rate': 2.837633948169371e-05, 'epoch': 3.84}
+{'loss': 0.1059, 'learning_rate': 2.825454967842195e-05, 'epoch': 3.95}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0939, 'learning_rate': 2.8128636966521956e-05, 'epoch': 4.05}
+{'loss': 0.078, 'learning_rate': 2.7998640511911757e-05, 'epoch': 4.16}
+{'loss': 0.0814, 'learning_rate': 2.7864600750782507e-05, 'epoch': 4.27}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-8000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-8000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-8000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-8000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-8000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-7000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.3288603127002716, 'eval_f1': 0.5924436448301408, 'eval_runtime': 8.1082, 'eval_samples_per_second': 616.661, 'eval_steps_per_second': 38.603, 'epoch': 4.27}
+{'loss': 0.0764, 'learning_rate': 2.7726559377020532e-05, 'epoch': 4.37}
+{'loss': 0.0801, 'learning_rate': 2.7584559329238218e-05, 'epoch': 4.48}
+{'loss': 0.0821, 'learning_rate': 2.7438644777417673e-05, 'epoch': 4.59}
+{'loss': 0.0778, 'learning_rate': 2.728886110917141e-05, 'epoch': 4.69}
+{'loss': 0.0748, 'learning_rate': 2.7135254915624213e-05, 'epoch': 4.8}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-9000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-9000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-9000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-9000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-9000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-8000] due to args.save_total_limit
+{'eval_loss': 0.32786571979522705, 'eval_f1': 0.604954954954955, 'eval_runtime': 8.0943, 'eval_samples_per_second': 617.717, 'eval_steps_per_second': 38.669, 'epoch': 4.8}
+{'loss': 0.0749, 'learning_rate': 2.697787397692072e-05, 'epoch': 4.91}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0737, 'learning_rate': 2.6816767247363108e-05, 'epoch': 5.01}
+{'loss': 0.0529, 'learning_rate': 2.6651984840183545e-05, 'epoch': 5.12}
+{'loss': 0.0585, 'learning_rate': 2.6483578011956173e-05, 'epoch': 5.23}
+{'loss': 0.0566, 'learning_rate': 2.6311599146653446e-05, 'epoch': 5.33}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-10000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-10000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-10000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-10000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-10000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-9000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.36311838030815125, 'eval_f1': 0.5935309830472614, 'eval_runtime': 8.0382, 'eval_samples_per_second': 622.03, 'eval_steps_per_second': 38.939, 'epoch': 5.33}
+{'loss': 0.0571, 'learning_rate': 2.613610173935175e-05, 'epoch': 5.44}
+{'loss': 0.0556, 'learning_rate': 2.5957140379591465e-05, 'epoch': 5.55}
+{'loss': 0.0564, 'learning_rate': 2.5774770734396533e-05, 'epoch': 5.65}
+{'loss': 0.0597, 'learning_rate': 2.5589049530958885e-05, 'epoch': 5.76}
+{'loss': 0.0566, 'learning_rate': 2.5400034538993133e-05, 'epoch': 5.87}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-11000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-11000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-11000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-11000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-11000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-10000] due to args.save_total_limit
+{'eval_loss': 0.355435311794281, 'eval_f1': 0.5991550377672513, 'eval_runtime': 8.0292, 'eval_samples_per_second': 622.725, 'eval_steps_per_second': 38.983, 'epoch': 5.87}
+{'loss': 0.0573, 'learning_rate': 2.5207784552766914e-05, 'epoch': 5.97}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.045, 'learning_rate': 2.501235937281259e-05, 'epoch': 6.08}
+{'loss': 0.0442, 'learning_rate': 2.4813819787325925e-05, 'epoch': 6.19}
+{'loss': 0.0415, 'learning_rate': 2.4612227553257545e-05, 'epoch': 6.29}
+{'loss': 0.0429, 'learning_rate': 2.4407645377103056e-05, 'epoch': 6.4}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-12000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-12000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-12000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-12000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-12000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-11000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.3838558495044708, 'eval_f1': 0.6022742057193412, 'eval_runtime': 8.2614, 'eval_samples_per_second': 605.226, 'eval_steps_per_second': 37.887, 'epoch': 6.4}
+{'loss': 0.04, 'learning_rate': 2.4200136895397818e-05, 'epoch': 6.51}
+{'loss': 0.0404, 'learning_rate': 2.3989766654922404e-05, 'epoch': 6.61}
+{'loss': 0.0465, 'learning_rate': 2.3776600092624925e-05, 'epoch': 6.72}
+{'loss': 0.041, 'learning_rate': 2.356070351526648e-05, 'epoch': 6.83}
+{'loss': 0.0434, 'learning_rate': 2.3342144078796007e-05, 'epoch': 6.93}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-13000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-13000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-13000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-13000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-13000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-12000] due to args.save_total_limit
+{'eval_loss': 0.390750527381897, 'eval_f1': 0.5970486914494318, 'eval_runtime': 8.1077, 'eval_samples_per_second': 616.697, 'eval_steps_per_second': 38.605, 'epoch': 6.93}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0422, 'learning_rate': 2.312098976746107e-05, 'epoch': 7.04}
+{'loss': 0.0326, 'learning_rate': 2.2897309372660873e-05, 'epoch': 7.15}
+{'loss': 0.0306, 'learning_rate': 2.267117247154833e-05, 'epoch': 7.25}
+{'loss': 0.0319, 'learning_rate': 2.2442649405387632e-05, 'epoch': 7.36}
+{'loss': 0.0316, 'learning_rate': 2.2211811257674192e-05, 'epoch': 7.47}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-14000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-14000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-14000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-14000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-14000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-13000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.43181049823760986, 'eval_f1': 0.6072764365861951, 'eval_runtime': 8.121, 'eval_samples_per_second': 615.691, 'eval_steps_per_second': 38.542, 'epoch': 7.47}
+{'loss': 0.0307, 'learning_rate': 2.1978729832023682e-05, 'epoch': 7.57}
+{'loss': 0.0336, 'learning_rate': 2.1743477629837057e-05, 'epoch': 7.68}
+{'loss': 0.0335, 'learning_rate': 2.15061278277486e-05, 'epoch': 7.79}
+{'loss': 0.0329, 'learning_rate': 2.126675425486383e-05, 'epoch': 7.89}
+{'loss': 0.0319, 'learning_rate': 2.1025431369794546e-05, 'epoch': 8.0}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-15000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-15000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-15000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-15000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-15000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-14000] due to args.save_total_limit
+{'eval_loss': 0.44738614559173584, 'eval_f1': 0.6111010386179389, 'eval_runtime': 8.007, 'eval_samples_per_second': 624.452, 'eval_steps_per_second': 39.091, 'epoch': 8.0}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0233, 'learning_rate': 2.0782234237497998e-05, 'epoch': 8.11}
+{'loss': 0.0259, 'learning_rate': 2.053723850592749e-05, 'epoch': 8.21}
+{'loss': 0.0214, 'learning_rate': 2.029052038250162e-05, 'epoch': 8.32}
+{'loss': 0.0256, 'learning_rate': 2.004215661039947e-05, 'epoch': 8.43}
+{'loss': 0.0251, 'learning_rate': 1.9792224444689223e-05, 'epoch': 8.53}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-16000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-16000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-16000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-16000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-16000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-15000] due to args.save_total_limit
+{'eval_loss': 0.4512913227081299, 'eval_f1': 0.60691668186912, 'eval_runtime': 8.0843, 'eval_samples_per_second': 618.486, 'eval_steps_per_second': 38.717, 'epoch': 8.53}
+{'loss': 0.0236, 'learning_rate': 1.954080162829745e-05, 'epoch': 8.64}
+{'loss': 0.026, 'learning_rate': 1.9287966367826726e-05, 'epoch': 8.75}
+{'loss': 0.0238, 'learning_rate': 1.9033797309228984e-05, 'epoch': 8.85}
+{'loss': 0.0248, 'learning_rate': 1.8778373513342223e-05, 'epoch': 8.96}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0205, 'learning_rate': 1.8521774431298116e-05, 'epoch': 9.07}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-17000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-17000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-17000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-17000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-17000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-16000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.46837523579597473, 'eval_f1': 0.6007419128900879, 'eval_runtime': 8.1422, 'eval_samples_per_second': 614.088, 'eval_steps_per_second': 38.442, 'epoch': 9.07}
+{'loss': 0.0193, 'learning_rate': 1.826407987980829e-05, 'epoch': 9.17}
+{'loss': 0.0187, 'learning_rate': 1.800537001633682e-05, 'epoch': 9.28}
+{'loss': 0.0184, 'learning_rate': 1.774572531416679e-05, 'epoch': 9.39}
+{'loss': 0.017, 'learning_rate': 1.7485226537368565e-05, 'epoch': 9.49}
+{'loss': 0.0173, 'learning_rate': 1.722395471567763e-05, 'epoch': 9.6}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-18000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-18000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-18000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-18000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-18000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-17000] due to args.save_total_limit
+{'eval_loss': 0.48181435465812683, 'eval_f1': 0.6062975920971393, 'eval_runtime': 8.0721, 'eval_samples_per_second': 619.414, 'eval_steps_per_second': 38.775, 'epoch': 9.6}
+{'loss': 0.0196, 'learning_rate': 1.6961991119289818e-05, 'epoch': 9.71}
+{'loss': 0.0188, 'learning_rate': 1.669941723358169e-05, 'epoch': 9.81}
+{'loss': 0.0192, 'learning_rate': 1.643631473376405e-05, 'epoch': 9.92}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0165, 'learning_rate': 1.6172765459476335e-05, 'epoch': 10.03}
+{'loss': 0.0135, 'learning_rate': 1.5908851389329907e-05, 'epoch': 10.13}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-19000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-19000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-19000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-19000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-19000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-18000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.5135340690612793, 'eval_f1': 0.6134152052869855, 'eval_runtime': 8.2307, 'eval_samples_per_second': 607.48, 'eval_steps_per_second': 38.028, 'epoch': 10.13}
+{'loss': 0.0137, 'learning_rate': 1.564465461540811e-05, 'epoch': 10.24}
+{'loss': 0.0147, 'learning_rate': 1.5380257317731035e-05, 'epoch': 10.35}
+{'loss': 0.0137, 'learning_rate': 1.5115741738692894e-05, 'epoch': 10.45}
+{'loss': 0.0168, 'learning_rate': 1.4851190157480054e-05, 'epoch': 10.56}
+{'loss': 0.0153, 'learning_rate': 1.4586684864477572e-05, 'epoch': 10.67}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-20000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-20000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-20000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-20000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-20000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-19000] due to args.save_total_limit
+{'eval_loss': 0.5143615007400513, 'eval_f1': 0.6064782552587431, 'eval_runtime': 8.2203, 'eval_samples_per_second': 608.253, 'eval_steps_per_second': 38.077, 'epoch': 10.67}
+{'loss': 0.0146, 'learning_rate': 1.4322308135672268e-05, 'epoch': 10.77}
+{'loss': 0.0105, 'learning_rate': 1.40581422070603e-05, 'epoch': 10.88}
+{'loss': 0.0136, 'learning_rate': 1.3794269249067122e-05, 'epoch': 10.99}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0107, 'learning_rate': 1.3530771340987894e-05, 'epoch': 11.09}
+{'loss': 0.0102, 'learning_rate': 1.3267730445456208e-05, 'epoch': 11.2}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-21000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-21000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-21000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-21000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-21000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-20000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.5290272235870361, 'eval_f1': 0.6032230079655091, 'eval_runtime': 8.2516, 'eval_samples_per_second': 605.947, 'eval_steps_per_second': 37.932, 'epoch': 11.2}
+{'loss': 0.0095, 'learning_rate': 1.300522838294912e-05, 'epoch': 11.31}
+{'loss': 0.0121, 'learning_rate': 1.2743346806336373e-05, 'epoch': 11.41}
+{'loss': 0.01, 'learning_rate': 1.2482167175481786e-05, 'epoch': 11.52}
+{'loss': 0.0117, 'learning_rate': 1.2221770731904661e-05, 'epoch': 11.63}
+{'loss': 0.0108, 'learning_rate': 1.1962238473509122e-05, 'epoch': 11.73}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-22000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-22000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-22000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-22000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-22000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-21000] due to args.save_total_limit
+{'eval_loss': 0.5291085243225098, 'eval_f1': 0.6069037656903765, 'eval_runtime': 8.0868, 'eval_samples_per_second': 618.294, 'eval_steps_per_second': 38.705, 'epoch': 11.73}
+{'loss': 0.0106, 'learning_rate': 1.1703651129389203e-05, 'epoch': 11.84}
+{'loss': 0.0094, 'learning_rate': 1.1446089134717594e-05, 'epoch': 11.95}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0082, 'learning_rate': 1.1189632605725762e-05, 'epoch': 12.05}
+{'loss': 0.008, 'learning_rate': 1.0934361314783339e-05, 'epoch': 12.16}
+{'loss': 0.0078, 'learning_rate': 1.0680354665584412e-05, 'epoch': 12.27}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-23000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-23000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-23000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-23000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-23000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-22000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.5647100806236267, 'eval_f1': 0.6116646669101153, 'eval_runtime': 7.9929, 'eval_samples_per_second': 625.553, 'eval_steps_per_second': 39.16, 'epoch': 12.27}
+{'loss': 0.0078, 'learning_rate': 1.0427691668448533e-05, 'epoch': 12.37}
+{'loss': 0.0094, 'learning_rate': 1.0176450915744072e-05, 'epoch': 12.48}
+{'loss': 0.0071, 'learning_rate': 9.926710557441581e-06, 'epoch': 12.59}
+{'loss': 0.0066, 'learning_rate': 9.67854827680478e-06, 'epoch': 12.69}
+{'loss': 0.0072, 'learning_rate': 9.432041266226686e-06, 'epoch': 12.8}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-24000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-24000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-24000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-24000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-24000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-23000] due to args.save_total_limit
+{'eval_loss': 0.563974916934967, 'eval_f1': 0.6151029984273081, 'eval_runtime': 8.0341, 'eval_samples_per_second': 622.345, 'eval_steps_per_second': 38.959, 'epoch': 12.8}
+{'loss': 0.007, 'learning_rate': 9.187266203218457e-06, 'epoch': 12.91}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0083, 'learning_rate': 8.94429922655837e-06, 'epoch': 13.01}
+{'loss': 0.0059, 'learning_rate': 8.703215912608416e-06, 'epoch': 13.12}
+{'loss': 0.0057, 'learning_rate': 8.46409125180579e-06, 'epoch': 13.23}
+{'loss': 0.0046, 'learning_rate': 8.226999625336663e-06, 'epoch': 13.33}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-25000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-25000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-25000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-25000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-25000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-24000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.5921682715415955, 'eval_f1': 0.6123357135465176, 'eval_runtime': 8.105, 'eval_samples_per_second': 616.901, 'eval_steps_per_second': 38.618, 'epoch': 13.33}
+{'loss': 0.0057, 'learning_rate': 7.992014781999454e-06, 'epoch': 13.44}
+{'loss': 0.0061, 'learning_rate': 7.75920981526484e-06, 'epoch': 13.55}
+{'loss': 0.0054, 'learning_rate': 7.528657140539548e-06, 'epoch': 13.65}
+{'loss': 0.0055, 'learning_rate': 7.3004284726411315e-06, 'epoch': 13.76}
+{'loss': 0.0069, 'learning_rate': 7.074594803490618e-06, 'epoch': 13.87}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-26000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-26000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-26000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-26000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-26000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-25000] due to args.save_total_limit
+{'eval_loss': 0.5960915088653564, 'eval_f1': 0.6178045174119207, 'eval_runtime': 8.1255, 'eval_samples_per_second': 615.35, 'eval_steps_per_second': 38.521, 'epoch': 13.87}
+{'loss': 0.0058, 'learning_rate': 6.851226380030057e-06, 'epoch': 13.97}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0046, 'learning_rate': 6.630392682371761e-06, 'epoch': 14.08}
+{'loss': 0.0049, 'learning_rate': 6.412162402186106e-06, 'epoch': 14.19}
+{'loss': 0.0048, 'learning_rate': 6.196603421334558e-06, 'epoch': 14.29}
+{'loss': 0.005, 'learning_rate': 5.983782790754624e-06, 'epoch': 14.4}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-27000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-27000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-27000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-27000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-27000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-26000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.598580002784729, 'eval_f1': 0.6154361724066818, 'eval_runtime': 8.1015, 'eval_samples_per_second': 617.173, 'eval_steps_per_second': 38.635, 'epoch': 14.4}
+{'loss': 0.0045, 'learning_rate': 5.773766709603221e-06, 'epoch': 14.51}
+{'loss': 0.0032, 'learning_rate': 5.566620504665043e-06, 'epoch': 14.61}
+{'loss': 0.0048, 'learning_rate': 5.362408610032257e-06, 'epoch': 14.72}
+{'loss': 0.0037, 'learning_rate': 5.161194547061893e-06, 'epoch': 14.83}
+{'loss': 0.004, 'learning_rate': 4.963040904617131e-06, 'epoch': 14.93}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-28000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-28000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-28000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-28000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-28000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-27000] due to args.save_total_limit
+{'eval_loss': 0.6103405356407166, 'eval_f1': 0.6141540691654587, 'eval_runtime': 8.0323, 'eval_samples_per_second': 622.489, 'eval_steps_per_second': 38.968, 'epoch': 14.93}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0052, 'learning_rate': 4.768009319598653e-06, 'epoch': 15.04}
+{'loss': 0.0031, 'learning_rate': 4.576160457772118e-06, 'epoch': 15.15}
+{'loss': 0.0028, 'learning_rate': 4.3875539948976964e-06, 'epoch': 15.25}
+{'loss': 0.0039, 'learning_rate': 4.202248598167549e-06, 'epoch': 15.36}
+{'loss': 0.0032, 'learning_rate': 4.020301907957075e-06, 'epoch': 15.47}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-29000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-29000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-29000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-29000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-29000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-28000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.6355434656143188, 'eval_f1': 0.6171832658012233, 'eval_runtime': 8.1653, 'eval_samples_per_second': 612.346, 'eval_steps_per_second': 38.333, 'epoch': 15.47}
+{'loss': 0.0039, 'learning_rate': 3.841770519895476e-06, 'epoch': 15.57}
+{'loss': 0.0026, 'learning_rate': 3.6667099672613734e-06, 'epoch': 15.68}
+{'loss': 0.004, 'learning_rate': 3.4951747037088262e-06, 'epoch': 15.79}
+{'loss': 0.0033, 'learning_rate': 3.3272180863291975e-06, 'epoch': 15.89}
+{'loss': 0.0032, 'learning_rate': 3.162892359054098e-06, 'epoch': 16.0}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-30000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-30000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-30000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-30000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-30000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-29000] due to args.save_total_limit
+{'eval_loss': 0.6225177645683289, 'eval_f1': 0.617249974036764, 'eval_runtime': 8.0795, 'eval_samples_per_second': 618.852, 'eval_steps_per_second': 38.74, 'epoch': 16.0}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0024, 'learning_rate': 3.002248636404601e-06, 'epoch': 16.11}
+{'loss': 0.0026, 'learning_rate': 2.8453368875917463e-06, 'epoch': 16.21}
+{'loss': 0.0021, 'learning_rate': 2.692205920973333e-06, 'epoch': 16.32}
+{'loss': 0.0027, 'learning_rate': 2.5429033688717525e-06, 'epoch': 16.43}
+{'loss': 0.0025, 'learning_rate': 2.3974756727576885e-06, 'epoch': 16.53}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-31000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-31000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-31000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-31000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-31000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-30000] due to args.save_total_limit
+{'eval_loss': 0.647573709487915, 'eval_f1': 0.616292614739458, 'eval_runtime': 8.1652, 'eval_samples_per_second': 612.358, 'eval_steps_per_second': 38.334, 'epoch': 16.53}
+{'loss': 0.0031, 'learning_rate': 2.2559680688041988e-06, 'epoch': 16.64}
+{'loss': 0.003, 'learning_rate': 2.1184245738157397e-06, 'epoch': 16.75}
+{'loss': 0.0029, 'learning_rate': 1.9848879715364555e-06, 'epoch': 16.85}
+{'loss': 0.0022, 'learning_rate': 1.8553997993420495e-06, 'epoch': 16.96}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0019, 'learning_rate': 1.7300003353193117e-06, 'epoch': 17.07}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-32000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-32000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-32000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-32000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-32000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-31000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.6525866985321045, 'eval_f1': 0.6200749257201912, 'eval_runtime': 8.1464, 'eval_samples_per_second': 613.766, 'eval_steps_per_second': 38.422, 'epoch': 17.07}
+{'loss': 0.0019, 'learning_rate': 1.6087285857373995e-06, 'epoch': 17.17}
+{'loss': 0.0018, 'learning_rate': 1.4916222729146689e-06, 'epoch': 17.28}
+{'loss': 0.0027, 'learning_rate': 1.3787178234849408e-06, 'epoch': 17.39}
+{'loss': 0.0025, 'learning_rate': 1.27005035706676e-06, 'epoch': 17.49}
+{'loss': 0.0019, 'learning_rate': 1.1656536753392288e-06, 'epoch': 17.6}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-33000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-33000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-33000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-33000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-33000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-32000] due to args.save_total_limit
+{'eval_loss': 0.6581390500068665, 'eval_f1': 0.6191797878135457, 'eval_runtime': 8.0198, 'eval_samples_per_second': 623.456, 'eval_steps_per_second': 39.028, 'epoch': 17.6}
+{'loss': 0.0026, 'learning_rate': 1.0655602515277963e-06, 'epoch': 17.71}
+{'loss': 0.0022, 'learning_rate': 9.69801220303247e-07, 'epoch': 17.81}
+{'loss': 0.0023, 'learning_rate': 8.784063680970788e-07, 'epoch': 17.92}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.002, 'learning_rate': 7.914041238362579e-07, 'epoch': 18.03}
+{'loss': 0.0018, 'learning_rate': 7.088215501002165e-07, 'epoch': 18.13}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-34000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-34000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-34000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-34000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-34000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-33000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.661400318145752, 'eval_f1': 0.6189414752993624, 'eval_runtime': 8.1184, 'eval_samples_per_second': 615.884, 'eval_steps_per_second': 38.554, 'epoch': 18.13}
+{'loss': 0.0016, 'learning_rate': 6.306843347028773e-07, 'epoch': 18.24}
+{'loss': 0.0016, 'learning_rate': 5.570167827023115e-07, 'epoch': 18.35}
+{'loss': 0.0021, 'learning_rate': 4.878418088404812e-07, 'epoch': 18.45}
+{'loss': 0.0038, 'learning_rate': 4.231809304154849e-07, 'epoch': 18.56}
+{'loss': 0.0017, 'learning_rate': 3.630542605884657e-07, 'epoch': 18.67}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-35000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-35000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-35000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-35000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-35000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-34000] due to args.save_total_limit
+{'eval_loss': 0.6603442430496216, 'eval_f1': 0.6199885898034334, 'eval_runtime': 8.0882, 'eval_samples_per_second': 618.183, 'eval_steps_per_second': 38.698, 'epoch': 18.67}
+{'loss': 0.0017, 'learning_rate': 3.074805021272931e-07, 'epoch': 18.77}
+{'loss': 0.0021, 'learning_rate': 2.5647694158894455e-07, 'epoch': 18.88}
+{'loss': 0.0014, 'learning_rate': 2.1005944394242694e-07, 'epoch': 18.99}
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'loss': 0.0015, 'learning_rate': 1.6824244763387063e-07, 'epoch': 19.09}
+{'loss': 0.0021, 'learning_rate': 1.3103896009537207e-07, 'epoch': 19.2}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-36000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-36000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-36000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-36000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-36000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-35000] due to args.save_total_limit
+/dssg/home/acct-stu/stu915/.conda/envs/py38/lib/python3.8/site-packages/torch/utils/data/dataloader.py:487: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 2, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+***** Running Evaluation *****
+  Num examples = 5000
+  Batch size = 16
+{'eval_loss': 0.6605552434921265, 'eval_f1': 0.62004662004662, 'eval_runtime': 8.1353, 'eval_samples_per_second': 614.603, 'eval_steps_per_second': 38.474, 'epoch': 19.2}
+{'loss': 0.0021, 'learning_rate': 9.846055369894524e-08, 'epoch': 19.31}
+{'loss': 0.0018, 'learning_rate': 7.05173621568711e-08, 'epoch': 19.41}
+{'loss': 0.0013, 'learning_rate': 4.721807736953576e-08, 'epoch': 19.52}
+{'loss': 0.0013, 'learning_rate': 2.8569946721773156e-08, 'epoch': 19.63}
+{'loss': 0.0015, 'learning_rate': 1.4578770828511667e-08, 'epoch': 19.73}
+Saving model checkpoint to ../ckpts/bert_test_linear_2022/checkpoint-37000
+Configuration saved in ../ckpts/bert_test_linear_2022/checkpoint-37000/config.json
+Model weights saved in ../ckpts/bert_test_linear_2022/checkpoint-37000/pytorch_model.bin
+tokenizer config file saved in ../ckpts/bert_test_linear_2022/checkpoint-37000/tokenizer_config.json
+Special tokens file saved in ../ckpts/bert_test_linear_2022/checkpoint-37000/special_tokens_map.json
+Deleting older checkpoint [../ckpts/bert_test_linear_2022/checkpoint-36000] due to args.save_total_limit
+
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+Loading best model from ../ckpts/bert_test_linear_2022/checkpoint-1000 (score: 0.5443126308443824).
+***** Running Prediction *****
+  Num examples = 3000
+  Batch size = 16
+{'eval_loss': 0.6607992053031921, 'eval_f1': 0.6203698906905663, 'eval_runtime': 8.261, 'eval_samples_per_second': 605.25, 'eval_steps_per_second': 37.889, 'epoch': 19.73}
+{'loss': 0.0027, 'learning_rate': 5.248901730460776e-09, 'epoch': 19.84}
+{'loss': 0.0018, 'learning_rate': 5.832415403872471e-10, 'epoch': 19.95}
+{'train_runtime': 4716.0224, 'train_samples_per_second': 127.226, 'train_steps_per_second': 7.952, 'train_loss': 0.06545442324678104, 'epoch': 20.0}

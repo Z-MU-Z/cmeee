@@ -7,7 +7,7 @@ from typing import List
 from sklearn.metrics import precision_recall_fscore_support
 from transformers.models.bert.modeling_bert import BertEmbeddings, BertAttention
 from transformers import set_seed, BertTokenizer, Trainer, HfArgumentParser, TrainingArguments, BertLayer,AdapterTrainer
-
+import transformers
 from args import ModelConstructArgs, CBLUEDataArgs
 from logger import get_logger
 from ee_data import EE_label2id2, EEDataset, EE_NUM_LABELS1, EE_NUM_LABELS2, EE_NUM_LABELS, CollateFnForEE, \
@@ -53,7 +53,7 @@ def get_model_with_tokenizer(model_args):
     if 'nested' not in model_args.head_type:
         model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS)
         if "layer" in model_args.head_type:
-            model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS,layer=10)
+            model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS,layer=5)
     else:
         #model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS1, num_labels2=EE_NUM_LABELS2)
         #model = model_class.from_pretrained(model_args.model_path, num_labels1=EE_NUM_LABELS1,num_labels2=EE_NUM_LABELS2,cache_dir = '/dssg/home/acct-stu/stu915/.cache/huggingface/transformers',local_files_only = True)
@@ -148,15 +148,85 @@ def main(_args: List[str] = None):
         compute_metrics=compute_metrics,
     )
     else:
-        trainer = Trainer(
-            model=model,
-            tokenizer=tokenizer,
-            args=train_args,
-            data_collator=CollateFnForEE(tokenizer.pad_token_id, for_nested_ner=for_nested_ner),
-            train_dataset=train_dataset,
-            eval_dataset=dev_dataset,
-            compute_metrics=compute_metrics,
-        )
+        if model_args.layer_decay:
+            print("use_layer_decay")
+            def bert_base_AdamW_grouped_LLRD(model, init_lr=train_args.learning_rate):
+
+                opt_parameters = []  # To be passed to the optimizer (only parameters of the layers you want to update).
+                named_parameters = list(model.named_parameters())
+                modelname = 'bert.'
+                # According to AAAMLP book by A. Thakur, we generally do not use any decay
+                # for bias and LayerNorm.weight layers.
+                no_decay = ["bias", "LayerNorm.bias", "LayerNorm.weight"]
+                set_2 = ["layer.4", "layer.5", "layer.6", "layer.7"]
+                set_3 = ["layer.8", "layer.9", "layer.10", "layer.11"]
+
+                for i, (name, params) in enumerate(named_parameters):
+
+                    weight_decay = 0.0 if any(p in name for p in no_decay) else 0.01
+
+                    if name.startswith(modelname+"embeddings") or name.startswith(modelname+"encoder"):
+                        # For first set, set lr to 1e-6 (i.e. 0.000001)
+                        lr = init_lr
+
+                        # For set_2, increase lr to 0.00000175
+                        lr = init_lr * 1.75 if any(p in name for p in set_2) else lr
+
+                        # For set_3, increase lr to 0.0000035
+                        lr = init_lr * 3.5 if any(p in name for p in set_3) else lr
+
+                        opt_parameters.append({"params": params,
+                                               "weight_decay": weight_decay,
+                                               "lr": lr})
+                        continue
+
+                    # For regressor and pooler, set lr to 0.0000036 (slightly higher than the top layer).
+                    if name.startswith(modelname+"regressor") or name.startswith(modelname+"pooler"):
+                        lr = init_lr * 3.6
+
+                        opt_parameters.append({"params": params,
+                                               "weight_decay": weight_decay,
+                                               "lr": lr})
+                        continue
+                    else:
+                        lr = init_lr * 10
+                        print(name)
+                        opt_parameters.append({"params": params,
+                                               "weight_decay": weight_decay,
+                                               "lr": lr})
+
+                return transformers.AdamW(opt_parameters, lr=init_lr)
+
+            opt = bert_base_AdamW_grouped_LLRD(model)
+            scheduler = transformers.get_cosine_schedule_with_warmup(
+                optimizer=opt,
+                num_warmup_steps=50,
+                num_training_steps=2000000,
+            )
+            trainer = Trainer(
+                model=model,
+                tokenizer=tokenizer,
+                args=train_args,
+                data_collator=CollateFnForEE(tokenizer.pad_token_id, for_nested_ner=for_nested_ner),
+                train_dataset=train_dataset,
+                eval_dataset=dev_dataset,
+                compute_metrics=compute_metrics,
+                optimizers= (opt,scheduler)
+            )
+        else:
+            trainer = Trainer(
+                model=model,
+                tokenizer=tokenizer,
+                args=train_args,
+                data_collator=CollateFnForEE(tokenizer.pad_token_id, for_nested_ner=for_nested_ner),
+                train_dataset=train_dataset,
+                eval_dataset=dev_dataset,
+                compute_metrics=compute_metrics,
+            )
+
+        print(trainer)
+
+
 
     if train_args.do_train:
         try:

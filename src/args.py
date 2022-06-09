@@ -21,6 +21,7 @@ class ModelConstructArgs(_Args):
     model_path: Optional[str] = field(default=None, metadata={"help": "Pretrained model path"})
     init_model: Optional[int] = field(default=0, metadata={"choices": [0, 1], "help": "Init models' parameters"})
     prompt_tuning: Optional[bool] = field(default=False, metadata={"help": "Init models' parameters"})
+    layer_decay: Optional[bool] = field(default=False, metadata={"help": "layer decay"})
     
 
 @dataclass

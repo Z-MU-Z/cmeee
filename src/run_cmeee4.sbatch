@@ -17,7 +17,7 @@ MODEL_TYPE=bert_10
 MODEL_PATH=../bert-base-chinese
 SEED=2022
 LABEL_NAMES=(labels)
-TASK_ID=5
+TASK_ID=0
 
 case ${TASK_ID} in
 0)
@@ -64,7 +64,7 @@ python run_cmeee.py \
   --gradient_accumulation_steps 4 \
   --eval_accumulation_steps     500 \
   \
-  --learning_rate               3e-5 \
+  --learning_rate               1e-6 \
   --weight_decay                3e-6 \
   --max_grad_norm               0.5 \
   --lr_scheduler_type           cosine \
@@ -94,6 +94,7 @@ python run_cmeee.py \
   --model_path                  ${MODEL_PATH} \
   --head_type                   ${HEAD_TYPE} \
   --prompt_tuning               false \
+  --layer_decay                 True \
   \
   --cblue_root                  ${CBLUE_ROOT} \
   --max_length                  512 \

@@ -855,3 +855,846 @@ Training completed. Do not forget to share your model on huggingface.co/models =
 [05-04 18:27:58] INFO -   Num examples = 3000
 [05-04 18:27:58] INFO -   Batch size = 16
 [05-04 18:28:01] INFO - `CMeEE_test.json` saved
+[06-01 19:41:57] INFO - ==== Train Arguments ==== {
+  "output_dir": "../ckpts/bert_linear_2022",
+  "overwrite_output_dir": true,
+  "do_train": true,
+  "do_eval": true,
+  "do_predict": true,
+  "evaluation_strategy": "steps",
+  "prediction_loss_only": false,
+  "per_device_train_batch_size": 4,
+  "per_device_eval_batch_size": 16,
+  "per_gpu_train_batch_size": null,
+  "per_gpu_eval_batch_size": null,
+  "gradient_accumulation_steps": 4,
+  "eval_accumulation_steps": 500,
+  "learning_rate": 3e-05,
+  "weight_decay": 3e-06,
+  "adam_beta1": 0.9,
+  "adam_beta2": 0.999,
+  "adam_epsilon": 1e-08,
+  "max_grad_norm": 0.5,
+  "num_train_epochs": 20.0,
+  "max_steps": -1,
+  "lr_scheduler_type": "cosine",
+  "warmup_ratio": 0.05,
+  "warmup_steps": 0,
+  "log_level": -1,
+  "log_level_replica": -1,
+  "log_on_each_node": true,
+  "logging_dir": "../ckpts/bert_linear_2022",
+  "logging_strategy": "steps",
+  "logging_first_step": true,
+  "logging_steps": 200,
+  "logging_nan_inf_filter": true,
+  "save_strategy": "steps",
+  "save_steps": 1000,
+  "save_total_limit": 1,
+  "save_on_each_node": false,
+  "no_cuda": false,
+  "seed": 2022,
+  "fp16": false,
+  "fp16_opt_level": "O1",
+  "fp16_backend": "auto",
+  "fp16_full_eval": false,
+  "local_rank": -1,
+  "xpu_backend": null,
+  "tpu_num_cores": null,
+  "tpu_metrics_debug": false,
+  "debug": [],
+  "dataloader_drop_last": false,
+  "eval_steps": 1000,
+  "dataloader_num_workers": 8,
+  "past_index": -1,
+  "run_name": "../ckpts/bert_linear_2022",
+  "disable_tqdm": true,
+  "remove_unused_columns": true,
+  "label_names": [
+    "labels"
+  ],
+  "load_best_model_at_end": true,
+  "metric_for_best_model": "f1",
+  "greater_is_better": true,
+  "ignore_data_skip": false,
+  "sharded_ddp": [],
+  "deepspeed": null,
+  "label_smoothing_factor": 0.0,
+  "adafactor": false,
+  "group_by_length": false,
+  "length_column_name": "length",
+  "report_to": [],
+  "ddp_find_unused_parameters": null,
+  "dataloader_pin_memory": false,
+  "skip_memory_metrics": true,
+  "use_legacy_prediction_loop": false,
+  "push_to_hub": false,
+  "resume_from_checkpoint": null,
+  "hub_model_id": null,
+  "hub_strategy": "every_save",
+  "hub_token": "<HUB_TOKEN>",
+  "gradient_checkpointing": false,
+  "push_to_hub_model_id": null,
+  "push_to_hub_organization": null,
+  "push_to_hub_token": "<PUSH_TO_HUB_TOKEN>",
+  "_n_gpu": 1,
+  "mp_parameters": ""
+}
+[06-01 19:41:57] INFO - ==== Model Arguments ==== {
+  "model_type": "bert",
+  "head_type": "linear",
+  "model_path": "../bert-base-chinese",
+  "init_model": 0,
+  "prompt_tuning": true
+}
+[06-01 19:41:57] INFO - ==== Data Arguments ==== {
+  "cblue_root": "../data/CBLUEDatasets",
+  "max_length": 512
+}
+[06-01 19:41:57] INFO - ===============> Called command line: 
+ run_cmeee.py --output_dir ../ckpts/bert_linear_2022 --report_to none --overwrite_output_dir true --do_train true --do_eval true --do_predict true --dataloader_pin_memory False --per_device_train_batch_size 4 --per_device_eval_batch_size 16 --gradient_accumulation_steps 4 --eval_accumulation_steps 500 --learning_rate 3e-5 --weight_decay 3e-6 --max_grad_norm 0.5 --lr_scheduler_type cosine --num_train_epochs 20 --warmup_ratio 0.05 --logging_dir ../ckpts/bert_linear_2022 --logging_strategy steps --logging_first_step true --logging_steps 200 --save_strategy steps --save_steps 1000 --evaluation_strategy steps --eval_steps 1000 --save_total_limit 1 --no_cuda false --seed 2022 --dataloader_num_workers 8 --disable_tqdm true --load_best_model_at_end true --metric_for_best_model f1 --greater_is_better true --model_type bert --model_path ../bert-base-chinese --head_type linear --prompt_tuning true --cblue_root ../data/CBLUEDatasets --max_length 512 --label_names labels
+[06-01 19:41:57] INFO - You can copy paste it to debug
+[06-01 19:50:27] INFO - ==== Train Arguments ==== {
+  "output_dir": "../ckpts/bert_linear_2022",
+  "overwrite_output_dir": true,
+  "do_train": true,
+  "do_eval": true,
+  "do_predict": true,
+  "evaluation_strategy": "steps",
+  "prediction_loss_only": false,
+  "per_device_train_batch_size": 4,
+  "per_device_eval_batch_size": 16,
+  "per_gpu_train_batch_size": null,
+  "per_gpu_eval_batch_size": null,
+  "gradient_accumulation_steps": 4,
+  "eval_accumulation_steps": 500,
+  "learning_rate": 3e-05,
+  "weight_decay": 3e-06,
+  "adam_beta1": 0.9,
+  "adam_beta2": 0.999,
+  "adam_epsilon": 1e-08,
+  "max_grad_norm": 0.5,
+  "num_train_epochs": 20.0,
+  "max_steps": -1,
+  "lr_scheduler_type": "cosine",
+  "warmup_ratio": 0.05,
+  "warmup_steps": 0,
+  "log_level": -1,
+  "log_level_replica": -1,
+  "log_on_each_node": true,
+  "logging_dir": "../ckpts/bert_linear_2022",
+  "logging_strategy": "steps",
+  "logging_first_step": true,
+  "logging_steps": 200,
+  "logging_nan_inf_filter": true,
+  "save_strategy": "steps",
+  "save_steps": 1000,
+  "save_total_limit": 1,
+  "save_on_each_node": false,
+  "no_cuda": false,
+  "seed": 2022,
+  "fp16": false,
+  "fp16_opt_level": "O1",
+  "fp16_backend": "auto",
+  "fp16_full_eval": false,
+  "local_rank": -1,
+  "xpu_backend": null,
+  "tpu_num_cores": null,
+  "tpu_metrics_debug": false,
+  "debug": [],
+  "dataloader_drop_last": false,
+  "eval_steps": 1000,
+  "dataloader_num_workers": 8,
+  "past_index": -1,
+  "run_name": "../ckpts/bert_linear_2022",
+  "disable_tqdm": true,
+  "remove_unused_columns": true,
+  "label_names": [
+    "labels"
+  ],
+  "load_best_model_at_end": true,
+  "metric_for_best_model": "f1",
+  "greater_is_better": true,
+  "ignore_data_skip": false,
+  "sharded_ddp": [],
+  "deepspeed": null,
+  "label_smoothing_factor": 0.0,
+  "adafactor": false,
+  "group_by_length": false,
+  "length_column_name": "length",
+  "report_to": [],
+  "ddp_find_unused_parameters": null,
+  "dataloader_pin_memory": false,
+  "skip_memory_metrics": true,
+  "use_legacy_prediction_loop": false,
+  "push_to_hub": false,
+  "resume_from_checkpoint": null,
+  "hub_model_id": null,
+  "hub_strategy": "every_save",
+  "hub_token": "<HUB_TOKEN>",
+  "gradient_checkpointing": false,
+  "push_to_hub_model_id": null,
+  "push_to_hub_organization": null,
+  "push_to_hub_token": "<PUSH_TO_HUB_TOKEN>",
+  "_n_gpu": 1,
+  "mp_parameters": ""
+}
+[06-01 19:50:27] INFO - ==== Model Arguments ==== {
+  "model_type": "bert",
+  "head_type": "linear",
+  "model_path": "../bert-base-chinese",
+  "init_model": 0,
+  "prompt_tuning": true
+}
+[06-01 19:50:28] INFO - ==== Data Arguments ==== {
+  "cblue_root": "../data/CBLUEDatasets",
+  "max_length": 512
+}
+[06-01 19:50:28] INFO - ===============> Called command line: 
+ run_cmeee.py --output_dir ../ckpts/bert_linear_2022 --report_to none --overwrite_output_dir true --do_train true --do_eval true --do_predict true --dataloader_pin_memory False --per_device_train_batch_size 4 --per_device_eval_batch_size 16 --gradient_accumulation_steps 4 --eval_accumulation_steps 500 --learning_rate 3e-5 --weight_decay 3e-6 --max_grad_norm 0.5 --lr_scheduler_type cosine --num_train_epochs 20 --warmup_ratio 0.05 --logging_dir ../ckpts/bert_linear_2022 --logging_strategy steps --logging_first_step true --logging_steps 200 --save_strategy steps --save_steps 1000 --evaluation_strategy steps --eval_steps 1000 --save_total_limit 1 --no_cuda false --seed 2022 --dataloader_num_workers 8 --disable_tqdm true --load_best_model_at_end true --metric_for_best_model f1 --greater_is_better true --model_type bert --model_path ../bert-base-chinese --head_type linear --prompt_tuning true --cblue_root ../data/CBLUEDatasets --max_length 512 --label_names labels
+[06-01 19:50:28] INFO - You can copy paste it to debug
+[06-01 19:51:50] INFO - ==== Train Arguments ==== {
+  "output_dir": "../ckpts/bert_linear_2022",
+  "overwrite_output_dir": true,
+  "do_train": true,
+  "do_eval": true,
+  "do_predict": true,
+  "evaluation_strategy": "steps",
+  "prediction_loss_only": false,
+  "per_device_train_batch_size": 4,
+  "per_device_eval_batch_size": 16,
+  "per_gpu_train_batch_size": null,
+  "per_gpu_eval_batch_size": null,
+  "gradient_accumulation_steps": 4,
+  "eval_accumulation_steps": 500,
+  "learning_rate": 3e-05,
+  "weight_decay": 3e-06,
+  "adam_beta1": 0.9,
+  "adam_beta2": 0.999,
+  "adam_epsilon": 1e-08,
+  "max_grad_norm": 0.5,
+  "num_train_epochs": 20.0,
+  "max_steps": -1,
+  "lr_scheduler_type": "cosine",
+  "warmup_ratio": 0.05,
+  "warmup_steps": 0,
+  "log_level": -1,
+  "log_level_replica": -1,
+  "log_on_each_node": true,
+  "logging_dir": "../ckpts/bert_linear_2022",
+  "logging_strategy": "steps",
+  "logging_first_step": true,
+  "logging_steps": 200,
+  "logging_nan_inf_filter": true,
+  "save_strategy": "steps",
+  "save_steps": 1000,
+  "save_total_limit": 1,
+  "save_on_each_node": false,
+  "no_cuda": false,
+  "seed": 2022,
+  "fp16": false,
+  "fp16_opt_level": "O1",
+  "fp16_backend": "auto",
+  "fp16_full_eval": false,
+  "local_rank": -1,
+  "xpu_backend": null,
+  "tpu_num_cores": null,
+  "tpu_metrics_debug": false,
+  "debug": [],
+  "dataloader_drop_last": false,
+  "eval_steps": 1000,
+  "dataloader_num_workers": 8,
+  "past_index": -1,
+  "run_name": "../ckpts/bert_linear_2022",
+  "disable_tqdm": true,
+  "remove_unused_columns": true,
+  "label_names": [
+    "labels"
+  ],
+  "load_best_model_at_end": true,
+  "metric_for_best_model": "f1",
+  "greater_is_better": true,
+  "ignore_data_skip": false,
+  "sharded_ddp": [],
+  "deepspeed": null,
+  "label_smoothing_factor": 0.0,
+  "adafactor": false,
+  "group_by_length": false,
+  "length_column_name": "length",
+  "report_to": [],
+  "ddp_find_unused_parameters": null,
+  "dataloader_pin_memory": false,
+  "skip_memory_metrics": true,
+  "use_legacy_prediction_loop": false,
+  "push_to_hub": false,
+  "resume_from_checkpoint": null,
+  "hub_model_id": null,
+  "hub_strategy": "every_save",
+  "hub_token": "<HUB_TOKEN>",
+  "gradient_checkpointing": false,
+  "push_to_hub_model_id": null,
+  "push_to_hub_organization": null,
+  "push_to_hub_token": "<PUSH_TO_HUB_TOKEN>",
+  "_n_gpu": 1,
+  "mp_parameters": ""
+}
+[06-01 19:51:50] INFO - ==== Model Arguments ==== {
+  "model_type": "bert",
+  "head_type": "linear",
+  "model_path": "../bert-base-chinese",
+  "init_model": 0,
+  "prompt_tuning": true
+}
+[06-01 19:51:50] INFO - ==== Data Arguments ==== {
+  "cblue_root": "../data/CBLUEDatasets",
+  "max_length": 512
+}
+[06-01 19:51:50] INFO - ===============> Called command line: 
+ run_cmeee.py --output_dir ../ckpts/bert_linear_2022 --report_to none --overwrite_output_dir true --do_train true --do_eval true --do_predict true --dataloader_pin_memory False --per_device_train_batch_size 4 --per_device_eval_batch_size 16 --gradient_accumulation_steps 4 --eval_accumulation_steps 500 --learning_rate 3e-5 --weight_decay 3e-6 --max_grad_norm 0.5 --lr_scheduler_type cosine --num_train_epochs 20 --warmup_ratio 0.05 --logging_dir ../ckpts/bert_linear_2022 --logging_strategy steps --logging_first_step true --logging_steps 200 --save_strategy steps --save_steps 1000 --evaluation_strategy steps --eval_steps 1000 --save_total_limit 1 --no_cuda false --seed 2022 --dataloader_num_workers 8 --disable_tqdm true --load_best_model_at_end true --metric_for_best_model f1 --greater_is_better true --model_type bert --model_path ../bert-base-chinese --head_type linear --prompt_tuning true --cblue_root ../data/CBLUEDatasets --max_length 512 --label_names labels
+[06-01 19:51:50] INFO - You can copy paste it to debug
+[06-01 19:52:16] INFO - Trainset: 15000 samples
+[06-01 19:52:16] INFO - Devset: 5000 samples
+[06-01 19:52:46] INFO - ***** Running training *****
+[06-01 19:52:46] INFO -   Num examples = 15000
+[06-01 19:52:46] INFO -   Num Epochs = 20
+[06-01 19:52:46] INFO -   Instantaneous batch size per device = 4
+[06-01 19:52:46] INFO -   Total train batch size (w. parallel, distributed & accumulation) = 16
+[06-01 19:52:46] INFO -   Gradient Accumulation steps = 4
+[06-01 19:52:46] INFO -   Total optimization steps = 18740
+[06-01 19:54:36] INFO - ***** Running Evaluation *****
+[06-01 19:54:36] INFO -   Num examples = 5000
+[06-01 19:54:36] INFO -   Batch size = 16
+[06-01 19:54:42] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-1000
+[06-01 19:54:45] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-18000] due to args.save_total_limit
+[06-01 19:56:31] INFO - ***** Running Evaluation *****
+[06-01 19:56:31] INFO -   Num examples = 5000
+[06-01 19:56:31] INFO -   Batch size = 16
+[06-01 19:56:36] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-2000
+[06-01 19:56:38] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-1000] due to args.save_total_limit
+[06-01 19:57:16] INFO - Keyboard interrupt
+[06-01 19:57:19] INFO - Testset: 3000 samples
+[06-01 19:57:19] INFO - ***** Running Prediction *****
+[06-01 19:57:19] INFO -   Num examples = 3000
+[06-01 19:57:19] INFO -   Batch size = 16
+[06-01 19:57:21] INFO - `CMeEE_test.json` saved
+[06-01 20:00:20] INFO - ==== Train Arguments ==== {
+  "output_dir": "../ckpts/bert_linear_2022",
+  "overwrite_output_dir": true,
+  "do_train": true,
+  "do_eval": true,
+  "do_predict": true,
+  "evaluation_strategy": "steps",
+  "prediction_loss_only": false,
+  "per_device_train_batch_size": 4,
+  "per_device_eval_batch_size": 16,
+  "per_gpu_train_batch_size": null,
+  "per_gpu_eval_batch_size": null,
+  "gradient_accumulation_steps": 4,
+  "eval_accumulation_steps": 500,
+  "learning_rate": 3e-05,
+  "weight_decay": 3e-06,
+  "adam_beta1": 0.9,
+  "adam_beta2": 0.999,
+  "adam_epsilon": 1e-08,
+  "max_grad_norm": 0.5,
+  "num_train_epochs": 20.0,
+  "max_steps": -1,
+  "lr_scheduler_type": "cosine",
+  "warmup_ratio": 0.05,
+  "warmup_steps": 0,
+  "log_level": -1,
+  "log_level_replica": -1,
+  "log_on_each_node": true,
+  "logging_dir": "../ckpts/bert_linear_2022",
+  "logging_strategy": "steps",
+  "logging_first_step": true,
+  "logging_steps": 200,
+  "logging_nan_inf_filter": true,
+  "save_strategy": "steps",
+  "save_steps": 1000,
+  "save_total_limit": 1,
+  "save_on_each_node": false,
+  "no_cuda": false,
+  "seed": 2022,
+  "fp16": false,
+  "fp16_opt_level": "O1",
+  "fp16_backend": "auto",
+  "fp16_full_eval": false,
+  "local_rank": -1,
+  "xpu_backend": null,
+  "tpu_num_cores": null,
+  "tpu_metrics_debug": false,
+  "debug": [],
+  "dataloader_drop_last": false,
+  "eval_steps": 1000,
+  "dataloader_num_workers": 8,
+  "past_index": -1,
+  "run_name": "../ckpts/bert_linear_2022",
+  "disable_tqdm": true,
+  "remove_unused_columns": true,
+  "label_names": [
+    "labels"
+  ],
+  "load_best_model_at_end": true,
+  "metric_for_best_model": "f1",
+  "greater_is_better": true,
+  "ignore_data_skip": false,
+  "sharded_ddp": [],
+  "deepspeed": null,
+  "label_smoothing_factor": 0.0,
+  "adafactor": false,
+  "group_by_length": false,
+  "length_column_name": "length",
+  "report_to": [],
+  "ddp_find_unused_parameters": null,
+  "dataloader_pin_memory": false,
+  "skip_memory_metrics": true,
+  "use_legacy_prediction_loop": false,
+  "push_to_hub": false,
+  "resume_from_checkpoint": null,
+  "hub_model_id": null,
+  "hub_strategy": "every_save",
+  "hub_token": "<HUB_TOKEN>",
+  "gradient_checkpointing": false,
+  "push_to_hub_model_id": null,
+  "push_to_hub_organization": null,
+  "push_to_hub_token": "<PUSH_TO_HUB_TOKEN>",
+  "_n_gpu": 1,
+  "mp_parameters": ""
+}
+[06-01 20:00:20] INFO - ==== Model Arguments ==== {
+  "model_type": "bert",
+  "head_type": "linear",
+  "model_path": "../bert-base-chinese",
+  "init_model": 0,
+  "prompt_tuning": true
+}
+[06-01 20:00:20] INFO - ==== Data Arguments ==== {
+  "cblue_root": "../data/CBLUEDatasets",
+  "max_length": 512
+}
+[06-01 20:00:20] INFO - ===============> Called command line: 
+ run_cmeee.py --output_dir ../ckpts/bert_linear_2022 --report_to none --overwrite_output_dir true --do_train true --do_eval true --do_predict true --dataloader_pin_memory False --per_device_train_batch_size 4 --per_device_eval_batch_size 16 --gradient_accumulation_steps 4 --eval_accumulation_steps 500 --learning_rate 3e-5 --weight_decay 3e-6 --max_grad_norm 0.5 --lr_scheduler_type cosine --num_train_epochs 20 --warmup_ratio 0.05 --logging_dir ../ckpts/bert_linear_2022 --logging_strategy steps --logging_first_step true --logging_steps 200 --save_strategy steps --save_steps 1000 --evaluation_strategy steps --eval_steps 1000 --save_total_limit 1 --no_cuda false --seed 2022 --dataloader_num_workers 8 --disable_tqdm true --load_best_model_at_end true --metric_for_best_model f1 --greater_is_better true --model_type bert --model_path ../bert-base-chinese --head_type linear --prompt_tuning true --cblue_root ../data/CBLUEDatasets --max_length 512 --label_names labels
+[06-01 20:00:20] INFO - You can copy paste it to debug
+[06-01 20:00:45] INFO - Trainset: 15000 samples
+[06-01 20:00:45] INFO - Devset: 5000 samples
+[06-01 20:00:49] INFO - ***** Running training *****
+[06-01 20:00:49] INFO -   Num examples = 15000
+[06-01 20:00:49] INFO -   Num Epochs = 20
+[06-01 20:00:49] INFO -   Instantaneous batch size per device = 4
+[06-01 20:00:49] INFO -   Total train batch size (w. parallel, distributed & accumulation) = 16
+[06-01 20:00:49] INFO -   Gradient Accumulation steps = 4
+[06-01 20:00:49] INFO -   Total optimization steps = 18740
+[06-01 20:02:34] INFO - ***** Running Evaluation *****
+[06-01 20:02:34] INFO -   Num examples = 5000
+[06-01 20:02:34] INFO -   Batch size = 16
+[06-01 20:02:40] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-1000
+[06-01 20:02:42] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-2000] due to args.save_total_limit
+[06-01 20:04:26] INFO - ***** Running Evaluation *****
+[06-01 20:04:26] INFO -   Num examples = 5000
+[06-01 20:04:26] INFO -   Batch size = 16
+[06-01 20:04:32] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-2000
+[06-01 20:04:33] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-1000] due to args.save_total_limit
+[06-01 20:06:18] INFO - ***** Running Evaluation *****
+[06-01 20:06:18] INFO -   Num examples = 5000
+[06-01 20:06:18] INFO -   Batch size = 16
+[06-01 20:06:23] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-3000
+[06-01 20:08:09] INFO - ***** Running Evaluation *****
+[06-01 20:08:09] INFO -   Num examples = 5000
+[06-01 20:08:09] INFO -   Batch size = 16
+[06-01 20:08:14] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-4000
+[06-01 20:08:16] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-3000] due to args.save_total_limit
+[06-01 20:10:00] INFO - ***** Running Evaluation *****
+[06-01 20:10:00] INFO -   Num examples = 5000
+[06-01 20:10:00] INFO -   Batch size = 16
+[06-01 20:10:05] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-5000
+[06-01 20:10:07] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-2000] due to args.save_total_limit
+[06-01 20:10:07] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-4000] due to args.save_total_limit
+[06-01 20:11:51] INFO - ***** Running Evaluation *****
+[06-01 20:11:51] INFO -   Num examples = 5000
+[06-01 20:11:51] INFO -   Batch size = 16
+[06-01 20:11:57] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-6000
+[06-01 20:13:43] INFO - ***** Running Evaluation *****
+[06-01 20:13:43] INFO -   Num examples = 5000
+[06-01 20:13:43] INFO -   Batch size = 16
+[06-01 20:13:49] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-7000
+[06-01 20:13:50] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-6000] due to args.save_total_limit
+[06-01 20:15:34] INFO - ***** Running Evaluation *****
+[06-01 20:15:34] INFO -   Num examples = 5000
+[06-01 20:15:34] INFO -   Batch size = 16
+[06-01 20:15:40] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-8000
+[06-01 20:15:42] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-7000] due to args.save_total_limit
+[06-01 20:16:19] INFO - Keyboard interrupt
+[06-01 20:16:22] INFO - Testset: 3000 samples
+[06-01 20:16:22] INFO - ***** Running Prediction *****
+[06-01 20:16:22] INFO -   Num examples = 3000
+[06-01 20:16:22] INFO -   Batch size = 16
+[06-01 20:16:25] INFO - `CMeEE_test.json` saved
+[06-01 20:18:46] INFO - ==== Train Arguments ==== {
+  "output_dir": "../ckpts/bert_linear_2022",
+  "overwrite_output_dir": true,
+  "do_train": true,
+  "do_eval": true,
+  "do_predict": true,
+  "evaluation_strategy": "steps",
+  "prediction_loss_only": false,
+  "per_device_train_batch_size": 4,
+  "per_device_eval_batch_size": 16,
+  "per_gpu_train_batch_size": null,
+  "per_gpu_eval_batch_size": null,
+  "gradient_accumulation_steps": 4,
+  "eval_accumulation_steps": 500,
+  "learning_rate": 3e-05,
+  "weight_decay": 3e-06,
+  "adam_beta1": 0.9,
+  "adam_beta2": 0.999,
+  "adam_epsilon": 1e-08,
+  "max_grad_norm": 0.5,
+  "num_train_epochs": 20.0,
+  "max_steps": -1,
+  "lr_scheduler_type": "cosine",
+  "warmup_ratio": 0.05,
+  "warmup_steps": 0,
+  "log_level": -1,
+  "log_level_replica": -1,
+  "log_on_each_node": true,
+  "logging_dir": "../ckpts/bert_linear_2022",
+  "logging_strategy": "steps",
+  "logging_first_step": true,
+  "logging_steps": 200,
+  "logging_nan_inf_filter": true,
+  "save_strategy": "steps",
+  "save_steps": 1000,
+  "save_total_limit": 1,
+  "save_on_each_node": false,
+  "no_cuda": false,
+  "seed": 2022,
+  "fp16": false,
+  "fp16_opt_level": "O1",
+  "fp16_backend": "auto",
+  "fp16_full_eval": false,
+  "local_rank": -1,
+  "xpu_backend": null,
+  "tpu_num_cores": null,
+  "tpu_metrics_debug": false,
+  "debug": [],
+  "dataloader_drop_last": false,
+  "eval_steps": 1000,
+  "dataloader_num_workers": 8,
+  "past_index": -1,
+  "run_name": "../ckpts/bert_linear_2022",
+  "disable_tqdm": true,
+  "remove_unused_columns": true,
+  "label_names": [
+    "labels"
+  ],
+  "load_best_model_at_end": true,
+  "metric_for_best_model": "f1",
+  "greater_is_better": true,
+  "ignore_data_skip": false,
+  "sharded_ddp": [],
+  "deepspeed": null,
+  "label_smoothing_factor": 0.0,
+  "adafactor": false,
+  "group_by_length": false,
+  "length_column_name": "length",
+  "report_to": [],
+  "ddp_find_unused_parameters": null,
+  "dataloader_pin_memory": false,
+  "skip_memory_metrics": true,
+  "use_legacy_prediction_loop": false,
+  "push_to_hub": false,
+  "resume_from_checkpoint": null,
+  "hub_model_id": null,
+  "hub_strategy": "every_save",
+  "hub_token": "<HUB_TOKEN>",
+  "gradient_checkpointing": false,
+  "push_to_hub_model_id": null,
+  "push_to_hub_organization": null,
+  "push_to_hub_token": "<PUSH_TO_HUB_TOKEN>",
+  "_n_gpu": 1,
+  "mp_parameters": ""
+}
+[06-01 20:18:46] INFO - ==== Model Arguments ==== {
+  "model_type": "bert",
+  "head_type": "linear",
+  "model_path": "../bert-base-chinese",
+  "init_model": 0,
+  "prompt_tuning": true
+}
+[06-01 20:18:46] INFO - ==== Data Arguments ==== {
+  "cblue_root": "../data/CBLUEDatasets",
+  "max_length": 512
+}
+[06-01 20:18:46] INFO - ===============> Called command line: 
+ run_cmeee.py --output_dir ../ckpts/bert_linear_2022 --report_to none --overwrite_output_dir true --do_train true --do_eval true --do_predict true --dataloader_pin_memory False --per_device_train_batch_size 4 --per_device_eval_batch_size 16 --gradient_accumulation_steps 4 --eval_accumulation_steps 500 --learning_rate 3e-5 --weight_decay 3e-6 --max_grad_norm 0.5 --lr_scheduler_type cosine --num_train_epochs 20 --warmup_ratio 0.05 --logging_dir ../ckpts/bert_linear_2022 --logging_strategy steps --logging_first_step true --logging_steps 200 --save_strategy steps --save_steps 1000 --evaluation_strategy steps --eval_steps 1000 --save_total_limit 1 --no_cuda false --seed 2022 --dataloader_num_workers 8 --disable_tqdm true --load_best_model_at_end true --metric_for_best_model f1 --greater_is_better true --model_type bert --model_path ../bert-base-chinese --head_type linear --prompt_tuning true --cblue_root ../data/CBLUEDatasets --max_length 512 --label_names labels
+[06-01 20:18:46] INFO - You can copy paste it to debug
+[06-01 20:19:15] INFO - Trainset: 15000 samples
+[06-01 20:19:15] INFO - Devset: 5000 samples
+[06-01 20:19:18] INFO - ***** Running training *****
+[06-01 20:19:18] INFO -   Num examples = 15000
+[06-01 20:19:18] INFO -   Num Epochs = 20
+[06-01 20:19:18] INFO -   Instantaneous batch size per device = 4
+[06-01 20:19:18] INFO -   Total train batch size (w. parallel, distributed & accumulation) = 16
+[06-01 20:19:18] INFO -   Gradient Accumulation steps = 4
+[06-01 20:19:18] INFO -   Total optimization steps = 18740
+[06-01 20:21:02] INFO - ***** Running Evaluation *****
+[06-01 20:21:02] INFO -   Num examples = 5000
+[06-01 20:21:02] INFO -   Batch size = 16
+[06-01 20:21:08] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-1000
+[06-01 20:21:09] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-5000] due to args.save_total_limit
+[06-01 20:21:09] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-8000] due to args.save_total_limit
+[06-01 20:22:52] INFO - ***** Running Evaluation *****
+[06-01 20:22:52] INFO -   Num examples = 5000
+[06-01 20:22:52] INFO -   Batch size = 16
+[06-01 20:22:58] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-2000
+[06-01 20:23:00] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-1000] due to args.save_total_limit
+[06-01 20:24:43] INFO - ***** Running Evaluation *****
+[06-01 20:24:43] INFO -   Num examples = 5000
+[06-01 20:24:43] INFO -   Batch size = 16
+[06-01 20:24:48] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-3000
+[06-01 20:26:32] INFO - ***** Running Evaluation *****
+[06-01 20:26:32] INFO -   Num examples = 5000
+[06-01 20:26:32] INFO -   Batch size = 16
+[06-01 20:26:38] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-4000
+[06-01 20:26:39] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-3000] due to args.save_total_limit
+[06-01 20:28:22] INFO - ***** Running Evaluation *****
+[06-01 20:28:22] INFO -   Num examples = 5000
+[06-01 20:28:22] INFO -   Batch size = 16
+[06-01 20:28:28] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-5000
+[06-01 20:28:29] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-2000] due to args.save_total_limit
+[06-01 20:28:29] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-4000] due to args.save_total_limit
+[06-01 20:30:12] INFO - ***** Running Evaluation *****
+[06-01 20:30:12] INFO -   Num examples = 5000
+[06-01 20:30:12] INFO -   Batch size = 16
+[06-01 20:30:18] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-6000
+[06-01 20:32:02] INFO - ***** Running Evaluation *****
+[06-01 20:32:02] INFO -   Num examples = 5000
+[06-01 20:32:02] INFO -   Batch size = 16
+[06-01 20:32:08] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-7000
+[06-01 20:32:10] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-6000] due to args.save_total_limit
+[06-01 20:33:52] INFO - ***** Running Evaluation *****
+[06-01 20:33:52] INFO -   Num examples = 5000
+[06-01 20:33:52] INFO -   Batch size = 16
+[06-01 20:33:58] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-8000
+[06-01 20:33:59] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-7000] due to args.save_total_limit
+[06-01 20:35:42] INFO - ***** Running Evaluation *****
+[06-01 20:35:42] INFO -   Num examples = 5000
+[06-01 20:35:42] INFO -   Batch size = 16
+[06-01 20:35:48] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-9000
+[06-01 20:35:49] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-8000] due to args.save_total_limit
+[06-01 20:37:16] INFO - Keyboard interrupt
+[06-01 20:37:19] INFO - Testset: 3000 samples
+[06-01 20:37:19] INFO - ***** Running Prediction *****
+[06-01 20:37:19] INFO -   Num examples = 3000
+[06-01 20:37:19] INFO -   Batch size = 16
+[06-01 20:37:21] INFO - `CMeEE_test.json` saved
+[06-01 22:09:09] INFO - ==== Train Arguments ==== {
+  "output_dir": "../ckpts/bert_linear_2022",
+  "overwrite_output_dir": true,
+  "do_train": true,
+  "do_eval": true,
+  "do_predict": true,
+  "evaluation_strategy": "steps",
+  "prediction_loss_only": false,
+  "per_device_train_batch_size": 4,
+  "per_device_eval_batch_size": 16,
+  "per_gpu_train_batch_size": null,
+  "per_gpu_eval_batch_size": null,
+  "gradient_accumulation_steps": 4,
+  "eval_accumulation_steps": 500,
+  "learning_rate": 3e-05,
+  "weight_decay": 3e-06,
+  "adam_beta1": 0.9,
+  "adam_beta2": 0.999,
+  "adam_epsilon": 1e-08,
+  "max_grad_norm": 0.5,
+  "num_train_epochs": 20.0,
+  "max_steps": -1,
+  "lr_scheduler_type": "cosine",
+  "warmup_ratio": 0.05,
+  "warmup_steps": 0,
+  "log_level": -1,
+  "log_level_replica": -1,
+  "log_on_each_node": true,
+  "logging_dir": "../ckpts/bert_linear_2022",
+  "logging_strategy": "steps",
+  "logging_first_step": true,
+  "logging_steps": 200,
+  "logging_nan_inf_filter": true,
+  "save_strategy": "steps",
+  "save_steps": 1000,
+  "save_total_limit": 1,
+  "save_on_each_node": false,
+  "no_cuda": false,
+  "seed": 2022,
+  "fp16": false,
+  "fp16_opt_level": "O1",
+  "fp16_backend": "auto",
+  "fp16_full_eval": false,
+  "local_rank": -1,
+  "xpu_backend": null,
+  "tpu_num_cores": null,
+  "tpu_metrics_debug": false,
+  "debug": [],
+  "dataloader_drop_last": false,
+  "eval_steps": 1000,
+  "dataloader_num_workers": 8,
+  "past_index": -1,
+  "run_name": "../ckpts/bert_linear_2022",
+  "disable_tqdm": true,
+  "remove_unused_columns": true,
+  "label_names": [
+    "labels"
+  ],
+  "load_best_model_at_end": true,
+  "metric_for_best_model": "f1",
+  "greater_is_better": true,
+  "ignore_data_skip": false,
+  "sharded_ddp": [],
+  "deepspeed": null,
+  "label_smoothing_factor": 0.0,
+  "adafactor": false,
+  "group_by_length": false,
+  "length_column_name": "length",
+  "report_to": [],
+  "ddp_find_unused_parameters": null,
+  "dataloader_pin_memory": false,
+  "skip_memory_metrics": true,
+  "use_legacy_prediction_loop": false,
+  "push_to_hub": false,
+  "resume_from_checkpoint": null,
+  "hub_model_id": null,
+  "hub_strategy": "every_save",
+  "hub_token": "<HUB_TOKEN>",
+  "gradient_checkpointing": false,
+  "push_to_hub_model_id": null,
+  "push_to_hub_organization": null,
+  "push_to_hub_token": "<PUSH_TO_HUB_TOKEN>",
+  "_n_gpu": 1,
+  "mp_parameters": ""
+}
+[06-01 22:09:09] INFO - ==== Model Arguments ==== {
+  "model_type": "bert",
+  "head_type": "linear",
+  "model_path": "../bert-base-chinese",
+  "init_model": 0,
+  "prompt_tuning": true
+}
+[06-01 22:09:09] INFO - ==== Data Arguments ==== {
+  "cblue_root": "../data/CBLUEDatasets",
+  "max_length": 512
+}
+[06-01 22:09:09] INFO - ===============> Called command line: 
+ run_cmeee.py --output_dir ../ckpts/bert_linear_2022 --report_to none --overwrite_output_dir true --do_train true --do_eval true --do_predict true --dataloader_pin_memory False --per_device_train_batch_size 4 --per_device_eval_batch_size 16 --gradient_accumulation_steps 4 --eval_accumulation_steps 500 --learning_rate 3e-5 --weight_decay 3e-6 --max_grad_norm 0.5 --lr_scheduler_type cosine --num_train_epochs 20 --warmup_ratio 0.05 --logging_dir ../ckpts/bert_linear_2022 --logging_strategy steps --logging_first_step true --logging_steps 200 --save_strategy steps --save_steps 1000 --evaluation_strategy steps --eval_steps 1000 --save_total_limit 1 --no_cuda false --seed 2022 --dataloader_num_workers 8 --disable_tqdm true --load_best_model_at_end true --metric_for_best_model f1 --greater_is_better true --model_type bert --model_path ../bert-base-chinese --head_type linear --prompt_tuning true --cblue_root ../data/CBLUEDatasets --max_length 512 --label_names labels
+[06-01 22:09:09] INFO - You can copy paste it to debug
+[06-01 22:09:34] INFO - Trainset: 15000 samples
+[06-01 22:09:34] INFO - Devset: 5000 samples
+[06-01 22:09:37] INFO - ***** Running training *****
+[06-01 22:09:37] INFO -   Num examples = 15000
+[06-01 22:09:37] INFO -   Num Epochs = 20
+[06-01 22:09:37] INFO -   Instantaneous batch size per device = 4
+[06-01 22:09:37] INFO -   Total train batch size (w. parallel, distributed & accumulation) = 16
+[06-01 22:09:37] INFO -   Gradient Accumulation steps = 4
+[06-01 22:09:37] INFO -   Total optimization steps = 18740
+[06-01 22:11:22] INFO - ***** Running Evaluation *****
+[06-01 22:11:22] INFO -   Num examples = 5000
+[06-01 22:11:22] INFO -   Batch size = 16
+[06-01 22:11:28] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-1000
+[06-01 22:11:29] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-5000] due to args.save_total_limit
+[06-01 22:11:29] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-9000] due to args.save_total_limit
+[06-01 22:13:13] INFO - ***** Running Evaluation *****
+[06-01 22:13:13] INFO -   Num examples = 5000
+[06-01 22:13:13] INFO -   Batch size = 16
+[06-01 22:13:18] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-2000
+[06-01 22:13:20] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-1000] due to args.save_total_limit
+[06-01 22:15:04] INFO - ***** Running Evaluation *****
+[06-01 22:15:04] INFO -   Num examples = 5000
+[06-01 22:15:04] INFO -   Batch size = 16
+[06-01 22:15:09] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-3000
+[06-01 22:16:54] INFO - ***** Running Evaluation *****
+[06-01 22:16:54] INFO -   Num examples = 5000
+[06-01 22:16:54] INFO -   Batch size = 16
+[06-01 22:17:00] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-4000
+[06-01 22:17:01] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-3000] due to args.save_total_limit
+[06-01 22:18:45] INFO - ***** Running Evaluation *****
+[06-01 22:18:45] INFO -   Num examples = 5000
+[06-01 22:18:45] INFO -   Batch size = 16
+[06-01 22:18:51] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-5000
+[06-01 22:18:52] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-2000] due to args.save_total_limit
+[06-01 22:18:52] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-4000] due to args.save_total_limit
+[06-01 22:20:36] INFO - ***** Running Evaluation *****
+[06-01 22:20:36] INFO -   Num examples = 5000
+[06-01 22:20:36] INFO -   Batch size = 16
+[06-01 22:20:41] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-6000
+[06-01 22:22:26] INFO - ***** Running Evaluation *****
+[06-01 22:22:26] INFO -   Num examples = 5000
+[06-01 22:22:26] INFO -   Batch size = 16
+[06-01 22:22:32] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-7000
+[06-01 22:22:35] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-6000] due to args.save_total_limit
+[06-01 22:24:18] INFO - ***** Running Evaluation *****
+[06-01 22:24:18] INFO -   Num examples = 5000
+[06-01 22:24:18] INFO -   Batch size = 16
+[06-01 22:24:24] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-8000
+[06-01 22:24:25] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-7000] due to args.save_total_limit
+[06-01 22:26:09] INFO - ***** Running Evaluation *****
+[06-01 22:26:09] INFO -   Num examples = 5000
+[06-01 22:26:09] INFO -   Batch size = 16
+[06-01 22:26:15] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-9000
+[06-01 22:26:16] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-8000] due to args.save_total_limit
+[06-01 22:28:00] INFO - ***** Running Evaluation *****
+[06-01 22:28:00] INFO -   Num examples = 5000
+[06-01 22:28:00] INFO -   Batch size = 16
+[06-01 22:28:06] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-10000
+[06-01 22:28:08] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-9000] due to args.save_total_limit
+[06-01 22:29:51] INFO - ***** Running Evaluation *****
+[06-01 22:29:51] INFO -   Num examples = 5000
+[06-01 22:29:51] INFO -   Batch size = 16
+[06-01 22:29:57] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-11000
+[06-01 22:29:58] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-10000] due to args.save_total_limit
+[06-01 22:31:42] INFO - ***** Running Evaluation *****
+[06-01 22:31:42] INFO -   Num examples = 5000
+[06-01 22:31:42] INFO -   Batch size = 16
+[06-01 22:31:48] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-12000
+[06-01 22:31:49] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-11000] due to args.save_total_limit
+[06-01 22:33:33] INFO - ***** Running Evaluation *****
+[06-01 22:33:33] INFO -   Num examples = 5000
+[06-01 22:33:33] INFO -   Batch size = 16
+[06-01 22:33:39] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-13000
+[06-01 22:33:41] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-12000] due to args.save_total_limit
+[06-01 22:35:24] INFO - ***** Running Evaluation *****
+[06-01 22:35:24] INFO -   Num examples = 5000
+[06-01 22:35:24] INFO -   Batch size = 16
+[06-01 22:35:30] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-14000
+[06-01 22:35:32] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-13000] due to args.save_total_limit
+[06-01 22:37:16] INFO - ***** Running Evaluation *****
+[06-01 22:37:16] INFO -   Num examples = 5000
+[06-01 22:37:16] INFO -   Batch size = 16
+[06-01 22:37:22] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-15000
+[06-01 22:37:24] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-14000] due to args.save_total_limit
+[06-01 22:39:07] INFO - ***** Running Evaluation *****
+[06-01 22:39:07] INFO -   Num examples = 5000
+[06-01 22:39:07] INFO -   Batch size = 16
+[06-01 22:39:13] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-16000
+[06-01 22:39:15] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-15000] due to args.save_total_limit
+[06-01 22:40:59] INFO - ***** Running Evaluation *****
+[06-01 22:40:59] INFO -   Num examples = 5000
+[06-01 22:40:59] INFO -   Batch size = 16
+[06-01 22:41:05] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-17000
+[06-01 22:41:06] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-16000] due to args.save_total_limit
+[06-01 22:42:49] INFO - ***** Running Evaluation *****
+[06-01 22:42:49] INFO -   Num examples = 5000
+[06-01 22:42:49] INFO -   Batch size = 16
+[06-01 22:42:55] INFO - Saving model checkpoint to ../ckpts/bert_linear_2022/checkpoint-18000
+[06-01 22:42:57] INFO - Deleting older checkpoint [../ckpts/bert_linear_2022/checkpoint-17000] due to args.save_total_limit
+[06-01 22:44:12] INFO - 
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+[06-01 22:44:12] INFO - Loading best model from ../ckpts/bert_linear_2022/checkpoint-5000 (score: 0.4319774698371044).
+[06-01 22:44:18] INFO - Testset: 3000 samples
+[06-01 22:44:18] INFO - ***** Running Prediction *****
+[06-01 22:44:18] INFO -   Num examples = 3000
+[06-01 22:44:18] INFO -   Batch size = 16
+[06-01 22:44:20] INFO - `CMeEE_test.json` saved
