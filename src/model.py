@@ -307,20 +307,24 @@ class BertForCRFHeadNestedNERWordChar(BertPreTrainedModel):
     config_class = BertConfig
     base_model_prefix = "bert"
 
-    def __init__(self, config_char: BertConfig, config_word: BertConfig, num_labels1: int, num_labels2: int):
-        super().__init__(config_char)
+    def __init__(self, config_char: str, config_word: str, char_config_file: BertConfig, word_config_file:BertConfig, num_labels1: int, num_labels2: int):
+        super().__init__(char_config_file)
         self.char_config = config_char
         self.word_config = config_word
 
-        self.char_bert = BertModel(config_char)
-        self.word_bert = BertModel(config_word)
         '''NOTE: This is where to modify for Nested NER.
         '''
-        self.classifier1 = CRFClassifier(config_char.hidden_size + config_word.hidden_size, num_labels1,
-                                         config_char.hidden_dropout_prob)
-        self.classifier2 = CRFClassifier(config_char.hidden_size + config_word.hidden_size, num_labels2,
-                                         config_char.hidden_dropout_prob)
+        self.linear_after_concat = nn.Linear(char_config_file.hidden_size+word_config_file.hidden_size, char_config_file.hidden_size)
+        self.classifier1 = CRFClassifier(char_config_file.hidden_size, num_labels1,
+                                         char_config_file.hidden_dropout_prob)
+        self.classifier2 = CRFClassifier(char_config_file.hidden_size, num_labels2,
+                                         char_config_file.hidden_dropout_prob)
         self.init_weights()
+
+        # self.char_bert = BertModel(config_char)
+        self.char_bert = BertModel.from_pretrained(config_char, config=char_config_file)
+        # self.word_bert = BertModel(config_word)
+        self.word_bert = BertModel.from_pretrained(config_word, config=word_config_file)
 
     def wl2cl(self, wl_embs, word_lens, word_mask, L_char):
         """
@@ -388,6 +392,8 @@ class BertForCRFHeadNestedNERWordChar(BertPreTrainedModel):
             extended_word_sequence_output
         ], dim=-1)
         # TODO: duplicate word to char-level
+        combined_output = self.linear_after_concat(combined_output)
+        combined_output = nn.ReLU()(combined_output)
 
         output = self.classifier1.forward(combined_output, char_attention_mask, labels, no_decode=no_decode)
         output2 = self.classifier2.forward(combined_output, char_attention_mask, labels2, no_decode=no_decode)
@@ -398,21 +404,30 @@ class BertForCRFHeadNestedNERWordCharAdd(BertPreTrainedModel):
     config_class = BertConfig
     base_model_prefix = "bert"
 
-    def __init__(self, config_char: BertConfig, config_word: BertConfig, num_labels1: int, num_labels2: int):
-        super().__init__(config_char)
+    def __init__(self,char_config_file: BertConfig, word_config_file:BertConfig, config_char: str, config_word: str,  num_labels1: int, num_labels2: int):
+        super().__init__(char_config_file)
         self.char_config = config_char
         self.word_config = config_word
 
-        self.char_bert = BertModel(config_char)
-        self.word_bert = BertModel(config_word)
-        '''NOTE: This is where to modify for Nested NER.
-        '''
-        self.word_to_char = nn.Linear(config_word.hidden_size, config_char.hidden_size)
-        self.classifier1 = CRFClassifier(config_char.hidden_size, num_labels1,
-                                         config_char.hidden_dropout_prob)
-        self.classifier2 = CRFClassifier(config_char.hidden_size, num_labels2,
-                                         config_char.hidden_dropout_prob)
+        # self.char_bert = BertModel(char_config_file)
+        # self.word_bert = BertModel(word_config_file)
+
+        # construct these normal layers, before init_weights
+        self.word_to_char = nn.Linear(word_config_file.hidden_size, char_config_file.hidden_size)
+        self.classifier1 = CRFClassifier(char_config_file.hidden_size, num_labels1,
+                                         char_config_file.hidden_dropout_prob)
+        self.classifier2 = CRFClassifier(char_config_file.hidden_size, num_labels2,
+                                         char_config_file.hidden_dropout_prob)
         self.init_weights()
+
+        print()
+        print(f">>>>>>>>>>> Inside model, begins to load pretrained.")
+        print(f"char config file: {char_config_file}")
+        self.char_bert = BertModel.from_pretrained(config_char, config=char_config_file)
+        print(f">>>>>>>>>>> Succeed loading pretrained model from {config_char}\n")
+        print(f"char config file: {word_config_file}")
+        self.word_bert = BertModel.from_pretrained(config_word, config=word_config_file)
+        print(f">>>>>>>>>>>> Succeed loading pretrained model from {config_word}\n")
 
     def wl2cl(self, wl_embs, word_lens, word_mask, L_char):
         """
@@ -428,6 +443,8 @@ class BertForCRFHeadNestedNERWordCharAdd(BertPreTrainedModel):
         for b in range(word_lens.shape[0]):
             start = 0
             for i, L in enumerate(word_lens[b]):
+                if word_mask[b, i] == 0:
+                    break  # early break
                 attn_mat[b, i, start:start + L] = 1
                 start += L
         return torch.bmm(wl_embs.permute(0, 2, 1), attn_mat).permute(0, 2, 1)
@@ -473,9 +490,10 @@ class BertForCRFHeadNestedNERWordCharAdd(BertPreTrainedModel):
             return_dict=return_dict,
         )[0]
         extended_word_sequence_output = self.wl2cl(word_sequence_output, word_lens, word_mask=word_attention_mask,
-                                                   L_char=char_sequence_output.shape[1])
-
-        combined_output = char_sequence_output + self.word_to_char(extended_word_sequence_output)
+                                                   L_char=char_sequence_output.shape[1])  # FIXME
+        #
+        combined_output = char_sequence_output + self.word_to_char(extended_word_sequence_output)  # NOTE
+        # combined_output = char_sequence_output # FIXME
 
         output = self.classifier1.forward(combined_output, char_attention_mask, labels, no_decode=no_decode)
         output2 = self.classifier2.forward(combined_output, char_attention_mask, labels2, no_decode=no_decode)
@@ -486,23 +504,22 @@ class BertForCRFHeadNestedNERFlat(BertPreTrainedModel):
     config_class = BertConfig
     base_model_prefix = "bert"
 
-    def __init__(self, config_char: BertConfig, config_word: BertConfig, num_labels1: int, num_labels2: int):
-        super().__init__(config_char)
+    def __init__(self, config_char: str, config_word: str, char_config_file: BertConfig, word_config_file:BertConfig, num_labels1: int, num_labels2: int):
+        super().__init__(char_config_file)
         self.char_config = config_char
         self.word_config = config_word
         self.hidden_dim = 128
 
-        self.char_bert = BertModel(config_char)
-        self.word_bert = BertModel(config_word)
+
         '''NOTE: This is where to modify for Nested NER.
         '''
         self.char_to_hidden = nn.Sequential(
-            nn.Linear(config_char.hidden_size, self.hidden_dim),
+            nn.Linear(char_config_file.hidden_size, self.hidden_dim),
             nn.Dropout(p=0.1),
             # nn.ReLU()
         )
         self.word_to_hidden = nn.Sequential(
-            nn.Linear(config_word.hidden_size, self.hidden_dim),
+            nn.Linear(word_config_file.hidden_size, self.hidden_dim),
             nn.Dropout(p=0.1),
             # nn.ReLU()
         )
@@ -555,10 +572,15 @@ class BertForCRFHeadNestedNERFlat(BertPreTrainedModel):
                                            four_pos_fusion_shared=True)
 
         self.classifier1 = CRFClassifier(self.hidden_dim, num_labels1,
-                                         config_char.hidden_dropout_prob)
+                                         char_config_file.hidden_dropout_prob)
         self.classifier2 = CRFClassifier(self.hidden_dim, num_labels2,
-                                         config_char.hidden_dropout_prob)
+                                         word_config_file.hidden_dropout_prob)
         self.init_weights()
+
+        # self.char_bert = BertModel(config_char)
+        self.char_bert = BertModel.from_pretrained(config_char, config=char_config_file)
+        # self.word_bert = BertModel(config_word)
+        self.word_bert = BertModel.from_pretrained(config_word, config=word_config_file)
 
     def select_lexical_word(self, word_seq, word_lens, word_mask):
         # word_seq: [B, L, D]

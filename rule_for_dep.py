@@ -94,7 +94,7 @@ if __name__ == '__main__':
     # depnames.pop(depnames.index("临床"))
 
     # ============== update some json ==========================
-    to_be_updated = "ckpts/bert_crf_nested_2022_aug60/CMeEE_test.json"
+    to_be_updated = "ckpts/bert_crf_nested_2022_aug60_layerdecay/CMeEE_test.json"
     # to_be_updated = "ckpts/global_pointer/CMeEE_dev.json"
 
     updated = update_json(to_be_updated, depnames)

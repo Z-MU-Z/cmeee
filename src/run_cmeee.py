@@ -143,23 +143,35 @@ def main(_args: List[str] = None):
     if model_args.use_word:
         # NOTE probably use the line above is better. Here we hacked model and word_tokenizer
         word_tokenizer = AlbertTokenizer.from_pretrained(model_args.word_model_path)
-        # char_bert_config = BertConfig.from_pretrained(model_args.model_path)
+        char_bert_config = BertConfig.from_pretrained(model_args.model_path)
         word_bert_config = BertConfig.from_pretrained(model_args.word_model_path)
         if model_args.use_word_add:
-            model = BertForCRFHeadNestedNERWordCharAdd.from_pretrained(model_args.model_path,
-                                                                       config_word=word_bert_config,
-                                                                       num_labels1=EE_NUM_LABELS1,
-                                                                       num_labels2=EE_NUM_LABELS2)
+            # model = BertForCRFHeadNestedNERWordCharAdd.from_pretrained(model_args.model_path,
+            #                                                            word_config_file=word_bert_config,
+            #                                                            config_char=model_args.model_path,
+            #                                                            config_word=model_args.word_model_path,
+            #                                                            num_labels1=EE_NUM_LABELS1,
+            #                                                            num_labels2=EE_NUM_LABELS2)
+            model = BertForCRFHeadNestedNERWordCharAdd(config_char=model_args.model_path,
+                                                       config_word=model_args.word_model_path,
+                                                       char_config_file=char_bert_config,
+                                                       word_config_file=word_bert_config,
+                                                       num_labels1=EE_NUM_LABELS1,
+                                                       num_labels2=EE_NUM_LABELS2)
         elif model_args.use_flat:
-            model = BertForCRFHeadNestedNERFlat.from_pretrained(model_args.model_path,
-                                                                config_word=word_bert_config,
-                                                                num_labels1=EE_NUM_LABELS1,
-                                                                num_labels2=EE_NUM_LABELS2)
+            model = BertForCRFHeadNestedNERFlat(model_args.model_path,
+                                                model_args.word_model_path,
+                                                char_config_file=char_bert_config,
+                                                word_config_file=word_bert_config,
+                                                num_labels1=EE_NUM_LABELS1,
+                                                num_labels2=EE_NUM_LABELS2)
         else:  # word concat with char
-            model = BertForCRFHeadNestedNERWordChar.from_pretrained(model_args.model_path,
-                                                                    config_word=word_bert_config,
-                                                                    num_labels1=EE_NUM_LABELS1,
-                                                                    num_labels2=EE_NUM_LABELS2)
+            model = BertForCRFHeadNestedNERWordChar(model_args.model_path,
+                                                    model_args.word_model_path,
+                                                    char_config_file=char_bert_config,
+                                                    word_config_file=word_bert_config,
+                                                    num_labels1=EE_NUM_LABELS1,
+                                                    num_labels2=EE_NUM_LABELS2)
     # logger.info(model)
     for_nested_ner = 'nested' in model_args.head_type
 
@@ -184,7 +196,7 @@ def main(_args: List[str] = None):
             check_word_level_integrity(test_dataset, test_word_dataset)
             logger.info("Congratulations for passing integrity tests on all datasets")
 
-            train_dataset = EEDatasetWordChar(train_dataset, train_word_dataset)
+            train_dataset = EEDatasetWordChar(train_dataset, train_word_dataset)  # FIXME
             dev_dataset = EEDatasetWordChar(dev_dataset, dev_word_dataset)
 
         logger.info(f"Trainset: {len(train_dataset)} samples")
@@ -198,20 +210,87 @@ def main(_args: List[str] = None):
             word_pad_token_id=word_tokenizer.pad_token_id,
             for_nested_ner=for_nested_ner
         )
+        # data_collator = CollateFnForEE(tokenizer.pad_token_id, for_nested_ner=for_nested_ner)  # FIXME
+
     else:
         data_collator = CollateFnForEE(tokenizer.pad_token_id, for_nested_ner=for_nested_ner)
     # ===== Trainer =====
     compute_metrics = ComputeMetricsForNestedNER() if for_nested_ner else ComputeMetricsForNER()
 
-    trainer = Trainer(
-        model=model,
-        tokenizer=tokenizer,
-        args=train_args,
-        data_collator=data_collator,
-        train_dataset=train_dataset,
-        eval_dataset=dev_dataset,
-        compute_metrics=compute_metrics,
-    )
+    if not model_args.layer_decay:
+        trainer = Trainer(
+            model=model,
+            tokenizer=tokenizer,
+            args=train_args,
+            data_collator=data_collator,
+            train_dataset=train_dataset,
+            eval_dataset=dev_dataset,
+            compute_metrics=compute_metrics,
+        )
+    else:
+        print("use_layer_decay")
+        logger.info("===================== Use layer decay ====================")
+
+        def bert_base_AdamW_grouped_LLRD(model, init_lr=train_args.learning_rate):
+
+            opt_parameters = []  # To be passed to the optimizer (only parameters of the layers you want to update).
+            named_parameters = list(model.named_parameters())
+            modelname = 'bert.'
+            # According to AAAMLP book by A. Thakur, we generally do not use any decay
+            # for bias and LayerNorm.weight layers.
+            no_decay = ["bias", "LayerNorm.bias", "LayerNorm.weight"]
+            set_2 = ["layer.4", "layer.5", "layer.6", "layer.7"]
+            set_3 = ["layer.8", "layer.9", "layer.10", "layer.11"]
+
+            for i, (name, params) in enumerate(named_parameters):
+                weight_decay = 0.0 if any(p in name for p in no_decay) else 0.01
+                if name.startswith(modelname + "embeddings") or name.startswith(modelname + "encoder"):
+                    # For first set, set lr to 1e-6 (i.e. 0.000001)
+                    lr = init_lr
+
+                    # For set_2, increase lr to 0.00000175
+                    lr = init_lr * 1.75 if any(p in name for p in set_2) else lr
+
+                    # For set_3, increase lr to 0.0000035
+                    lr = init_lr * 3.5 if any(p in name for p in set_3) else lr
+
+                    opt_parameters.append({"params": params,
+                                           "weight_decay": weight_decay,
+                                           "lr": lr})
+                    continue
+
+                # For regressor and pooler, set lr to 0.0000036 (slightly higher than the top layer).
+                if name.startswith(modelname + "regressor") or name.startswith(modelname + "pooler"):
+                    lr = init_lr * 3.6
+                    opt_parameters.append({"params": params,
+                                           "weight_decay": weight_decay,
+                                           "lr": lr})
+                    continue
+                else:
+                    lr = init_lr * 10
+                    print(name)
+                    opt_parameters.append({"params": params,
+                                           "weight_decay": weight_decay,
+                                           "lr": lr})
+
+            return transformers.AdamW(opt_parameters, lr=init_lr)
+
+        opt = bert_base_AdamW_grouped_LLRD(model)
+        scheduler = transformers.get_cosine_schedule_with_warmup(
+            optimizer=opt,
+            num_warmup_steps=50,
+            num_training_steps=2000000,
+        )
+        trainer = Trainer(
+            model=model,
+            tokenizer=tokenizer,
+            args=train_args,
+            data_collator=data_collator,
+            train_dataset=train_dataset,
+            eval_dataset=dev_dataset,
+            compute_metrics=compute_metrics,
+            optimizers=(opt, scheduler)
+        )
 
     if train_args.do_train:
         try:
@@ -224,6 +303,12 @@ def main(_args: List[str] = None):
         resume_from_checkpoint = get_last_checkpoint(trainer.args.output_dir)
         if resume_from_checkpoint is None:
             raise ValueError(f"No valid checkpoint found in output directory ({trainer.args.output_dir})")
+        # =================== hack by trainer_state.json ==========================
+        with open(f"{resume_from_checkpoint}/trainer_state.json") as jf:
+            trainer_state = json.load(jf)
+        resume_from_checkpoint = trainer_state['best_model_checkpoint']
+        # =========================================================================
+
         WEIGHTS_NAME = "pytorch_model.bin"
         CONFIG_NAME = "config.json"
 
@@ -253,7 +338,7 @@ def main(_args: List[str] = None):
             del state_dict
         # =====================================================================================================
 
-        set_to_do_predict = "dev"
+        set_to_do_predict = "test"
         test_dataset = EEDataset(data_args.cblue_root, set_to_do_predict, data_args.max_length, tokenizer,
                                  for_nested_ner=for_nested_ner)
         if model_args.use_word:

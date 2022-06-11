@@ -25,6 +25,7 @@ class ModelConstructArgs(_Args):
     model_path: Optional[str] = field(default=None, metadata={"help": "Pretrained model path"})
     word_model_path: Optional[str] = field(default=None, metadata={'help': "Pretrained word-level model path"})
     init_model: Optional[int] = field(default=0, metadata={"choices": [0, 1], "help": "Init models' parameters"})
+    layer_decay: Optional[bool] = field(default=False, metadata={"help": "layer decay"})
 
 @dataclass
 class CBLUEDataArgs(_Args):
