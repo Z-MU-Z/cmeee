@@ -212,9 +212,14 @@ def norm_example(ex, is_test=False):
     special_chars_replace.append("11")
     special_chars.append(chr(8571))
     special_chars_replace.append("12")
-    for n in range(9321, 9332):  # numbers in circles
+    for n in range(9312, 9332):  # numbers in circles
         special_chars.append(chr(n))
         special_chars_replace.append(str(n - 9311))
+
+    # for n in range(945, 970):  # from greek alpha to omega (25)
+    #     special_chars.append(chr(n))
+    #     special_chars_replace.append(chr(n - 848))
+
     # ===================================================================
 
     trans_mat_list = []
