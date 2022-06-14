@@ -198,7 +198,7 @@ class EEDataloader:
 
 
 def norm_example(ex, is_test=False):
-    ex.text = ex.text.lower()
+    ex.text = ex.text.lower()  # NOTE: upper to lower, because bert-base-chinese cannot deal with upper letters
     # ======================== Replace special chars ====================
     special_chars = ['℃', u'\ufeff', '\n']
     special_chars_replace = ["°C", "", ""]
