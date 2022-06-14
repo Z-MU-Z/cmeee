@@ -271,7 +271,7 @@ if __name__ == '__main__':
     # pred_json = '../ckpts/bert_crf_nested_2022/CMeEE_dev.json'
     # pred_json = '../ckpts/bert_crf_nested_2022/CMeEE_dev_updated_by_equ.json'
     # pred_json = "../ckpts/bert_crf_nested_2022_aug60/CMeEE_dev_updated_by_bod.json"
-    pred_json = '../ckpts/bert_crf_nested_2022_flat/CMeEE_dev_updated_by_dep.json'
+    pred_json = '../ckpts/roberta_large_crf_nested_2022_aug30/CMeEE_dev_updated_by_dep.json'
     # pred_json = '../ckpts/bert_crf_nested_2022_flat/CMeEE_dev.json'
 
     # pred_json = '../ckpts/global_pointer/CMeEE_dev.json'
