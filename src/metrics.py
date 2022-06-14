@@ -41,7 +41,9 @@ class ComputeMetricsForNER:  # training_args  `--label_names labels `
             true_and_pred = set.intersection(true, pred)
             total_true_and_pred += len(true_and_pred)
         f1 = 2 * total_true_and_pred / (total_pred + total_true)
-        return {"f1": f1}
+        recall = total_true_and_pred / total_true
+        precision = total_true_and_pred / total_pred
+        return {"f1": f1, 'recall': recall, 'precision': precision}
 
 
 class ComputeMetricsForNestedNER:  # training_args  `--label_names labels labels2`
@@ -71,7 +73,9 @@ class ComputeMetricsForNestedNER:  # training_args  `--label_names labels labels
             true_and_pred = set.intersection(true, pred)
             total_true_and_pred += len(true_and_pred)
         f1 = 2 * total_true_and_pred / (total_pred + total_true)
-        return {"f1": f1}
+        recall = total_true_and_pred / total_true
+        precision = total_true_and_pred / total_pred
+        return {"f1": f1, 'recall': recall, 'precision': precision}
 
 
 def extract_entities(batch_labels_or_preds: np.ndarray, for_nested_ner: bool = False, first_labels: bool = True) -> \

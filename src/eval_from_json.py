@@ -71,7 +71,7 @@ def f1_from_jsons(gt_label_json, pred_label_json, nested=True):
         metrics = ComputeMetricsForNestedNER()(EvalPrediction(pred_array, (label_array[:, :, 0], label_array[:, :, 1])))
     else:
         metrics = ComputeMetricsForNER()(EvalPrediction(pred_array, label_array))
-    return metrics['f1']
+    return metrics
 
 
 def get_type_wise_metric(gt_json, pred_json, nested=True):
@@ -89,15 +89,22 @@ def get_type_wise_metric(gt_json, pred_json, nested=True):
                 ent['entity'] = item['text'][ent['start_idx']:ent['end_idx'] + 1]
             pred_sets.append(ent)
 
+    eps = 1e-7
+
+    # ======= get general metrics =======
+    # correct = len(list(filter(lambda x:x in gt_label_sets, pred_sets)))
+    # r = correct / (len(gt_label_sets)+eps)
+    # p = correct / (len(pred_sets) + eps)
+    # f1 = 2 * r * p / (r + p)
+    # print(f"Overall metrics: recall {r} \t precision {p} \t f1 {f1}")
     res = []
     for type in tqdm(LABEL):
         this_type_gt = list(filter(lambda x: x['type'] == type, gt_label_sets))
         this_type_pred = list(filter(lambda x: x['type'] == type, pred_sets))
         this_type_correct = sum(map(lambda x: x in this_type_gt, this_type_pred))
-        eps = 1e-7
 
-        recall = this_type_correct /(len(this_type_gt)+eps)
-        precision = this_type_correct / (len(this_type_pred)+eps)
+        recall = this_type_correct / (len(this_type_gt) + eps)
+        precision = this_type_correct / (len(this_type_pred) + eps)
         f1 = 2 * recall * precision / (recall + precision + eps)
         res.append({
             "type": type,
@@ -258,22 +265,34 @@ def create_html(gt_label_json, pred_label_json, file_path='../result.html', samp
 
 if __name__ == '__main__':
     gt_json = '../data/CBLUEDatasets/CMeEE/CMeEE_dev.json'
-    # pred_json = '../ckpts/baseline_crf_nested/CMeEE_dev_updated_by_rule.json'
-    pred_json = '../ckpts/baseline_crf_nested/CMeEE_dev.json'
+    # pred_json = '../ckpts/baseline_crf_nested/CMeEE_dev_updated_by_bod.json'
+    # pred_json = '../ckpts/baseline_crf_nested/CMeEE_dev.json'
+    # pred_json = '../ckpts/bert_crf_nested_2022_flat/CMeEE_dev_updated_by_dep.json'
+    # pred_json = '../ckpts/bert_crf_nested_2022/CMeEE_dev.json'
+    # pred_json = '../ckpts/bert_crf_nested_2022/CMeEE_dev_updated_by_equ.json'
+    # pred_json = "../ckpts/bert_crf_nested_2022_aug60/CMeEE_dev_updated_by_bod.json"
+    pred_json = '../ckpts/bert_crf_nested_2022_flat/CMeEE_dev_updated_by_dep.json'
+    # pred_json = '../ckpts/bert_crf_nested_2022_flat/CMeEE_dev.json'
 
     # pred_json = '../ckpts/global_pointer/CMeEE_dev.json'
-    # pred_json = '../rule_for_dep_dev.json'
+    # pred_json = '../ckpts/global_pointer/CMeEE_dev_updated_by_ite.json'
+    # pred_json = "../ckpts/roberta_large_crf_nested_2022/CMeEE_dev.json"
 
-    f1 = f1_from_jsons(gt_label_json=gt_json,
-                       pred_label_json=pred_json,
-                       nested=False)
-    print(f"F1 = {f1}")
+    metrics = f1_from_jsons(gt_label_json=gt_json,
+                            pred_label_json=pred_json,
+                            nested=True)
+
+    f1 = metrics['f1']
+    recall = metrics['recall']
+    precision = metrics['precision']
+    print(f"F1 = {str(f1*100)[:6]} \t Recall = {str(recall*100)[:6]} \t Precision = { str(precision*100)[:6] }")
 
     create_html(gt_label_json=gt_json,
                 pred_label_json=pred_json,
                 file_path='result.html',
-                sample_num=100,
-                nested=False)
+                sample_num=200,
+                nested=True)
 
     type_wise_metric = get_type_wise_metric(gt_json, pred_json)
+    # type_wise_metric.to_csv("../figs/baseline_typewise.csv")
     print(type_wise_metric)
