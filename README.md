@@ -12,3 +12,6 @@
 
 运行完成后，将会在`ckpts/roberta_large_crf_nested_2022_aug30/`下看到`CMeEE_test.json`。
 然后运行`rule_for_dep.py`，将会在同目录下看到`CMeEE_test_updated_by_dep.json`。这即为最后用来评分的结果。
+我们在仓库中已经包含了这个结果，但是命名为
+
+我们还提供了测试脚本`src/eval_from_json.py`。其可以对两个json进行比较并输出评测指标。
